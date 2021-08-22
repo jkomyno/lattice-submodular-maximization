@@ -1,0 +1,47 @@
+name: probabilistic-submodular-models
+
+# dictionary of set-submodular functions
+objectives:
+
+  # synthetic monotone function: summation of sorted non-negative random weights
+  demo_monotone:
+
+    # size of the ground set
+    n: 12
+    #    n:
+    #      - 20
+    #      - 12
+    #      - 8
+    #      - 6
+
+    # upper bound of the lattice domain
+    b: 4
+    #    b:
+    #      - 1
+    #      - 5
+    #      - 10
+    #      - 50
+
+  # synthetic non-monotone function: summation of random weights
+  demo_non_monotone:
+
+    # size of the ground set
+    n:
+      - 20
+      - 12
+      - 8
+      - 6
+
+    # upper bound of the lattice domain
+    b:
+      - 1
+      - 5
+      - 10
+      - 50
+
+selected:
+  # integer-lattice submodular function to maximize
+  objective: 'demo_monotone'
+
+  # set to 1 to print debug info, 0 otherwise
+  verbose: 1
