@@ -13,14 +13,14 @@ def stochastic_greedy_norm(rng: np.random.Generator, f: Objective, r: int, eps: 
     This is a generalization of the StochasticGreedy algorithm for set-submodular monotone functions.
     :param rng: numpy random generator instance
     :param f: integer-lattice submodular function objective
-    :param r: cardinality constraints,
+    :param r: cardinality constraint
     :param eps: approximation threshold in (0, 0.5)
     """
     if eps is None:
         eps = 1 / (4 * f.n)
 
     # compute s, the sample size
-    s = int((f.n / r) * math.log(1 / eps))
+    s = int(((f.n * f.b) / r) * math.log(1 / eps))
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
@@ -35,7 +35,7 @@ def stochastic_greedy_norm(rng: np.random.Generator, f: Objective, r: int, eps: 
         # e = argmax_{e \in supp(q)} \Delta(e | x)
         e, _ = max((
           (e, f.value(x + utils.char_vector(f, e)) - f.value(x)) for e, qe in enumerate(q)
-          if qe > 0
+          if qe > 0 and x[e] < f.b
         ), key=utils.snd)
         one_e = utils.char_vector(f, e)
 
