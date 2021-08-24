@@ -29,7 +29,7 @@ $ python -m pip install -r requirements.txt
 Run:
 
 ```bash
-$ python main.py
+python main.py -m obj=demo_monotone,demo_non_monotone
 ```
 
 ## Configuration
