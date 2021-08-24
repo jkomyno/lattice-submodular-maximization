@@ -1,0 +1,7 @@
+# timeouts in seconds
+timeouts:
+  - 1
+  - 10
+
+# number of times the same experiment is repeated
+n_samples: 5

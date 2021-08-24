@@ -1,0 +1,47 @@
+objective: 'demo_monotone'
+
+benchmark:
+  # n: size of the ground set
+  # b: upper bound of the lattice domain
+  # r: cardinality constraint
+  nbr:
+    -
+      - 5   # n
+      - 1   # b
+      - 2   # r
+    -
+      - 5   # n
+      - 2   # b
+      - 4   # r
+    -
+      - 5   # n
+      - 4   # b
+      - 8   # r
+    -
+      - 5   # n
+      - 10  # b
+      - 20  # r
+    -
+      - 10  # n
+      - 1   # b
+      - 3   # r
+    -
+      - 10  # n
+      - 2   # b
+      - 6   # r
+    -
+      - 10  # n
+      - 4   # b
+      - 12  # r
+    -
+      - 15  # n
+      - 1   # b
+      - 6   # r
+    -
+      - 15  # n
+      - 2   # b
+      - 6   # r
+    -
+      - 15  # n
+      - 3   # b
+      - 12   # r
