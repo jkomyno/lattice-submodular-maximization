@@ -17,7 +17,7 @@ class DemoNonMonotone(Objective):
         self.rng = rng
 
         # generate n random weights
-        self.w = rng.integers(low=0, high=100, size=n)
+        self.w = rng.integers(low=-100, high=100, size=n)
 
     def value(self, x: NDArray[Int64]) -> int:
         """
