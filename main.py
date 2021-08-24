@@ -1,3 +1,5 @@
+from df_utils import BenchmarkDF
+import os
 import hydra
 import numpy as np
 from omegaconf import DictConfig
@@ -7,31 +9,18 @@ import utils
 import timeout
 import algo
 
-TIMEOUTS = [
-    # 1 second
-    1,
 
-    # 10 seconds
-    10,
-
-    # 1 minute
-    60,
-]
-
-
-@hydra.main(config_path="conf", config_name="config")
-def run(cfg: DictConfig) -> None:
+@hydra.main(config_path='conf', config_name='config')
+def benchmark(cfg: DictConfig) -> None:
     # numpy random generator instance
     rng: np.random.Generator = np.random.default_rng(2021)
 
-    # boolean switch for verbose messages
-    is_verbose = bool(cfg.selected.verbose)
-
     # basedir w.r.t. main.py
-    basedir = f'{Path(__file__).parent}'
+    basedir = os.path.join(hydra.utils.get_original_cwd(), Path(__file__).parent)
 
-    # objective submodular function
-    f = conf_utils.get_objective(rng, cfg=cfg)
+    # folder where to save benchmarks
+    output_benchmarks = os.path.join(basedir, cfg.output.benchmarks)
+    print(f'output_benchmark: {output_benchmarks}')
 
     #######################
     #  Run the maximizer  #
@@ -41,14 +30,42 @@ def run(cfg: DictConfig) -> None:
     # - We should run each experiment n_samples times
     # - We should store a list of the time results in a dataframe
 
-    for t in TIMEOUTS:
-        r = 10
-        S = timeout.break_after(seconds=t)(
-            algo.stochastic_greedy_norm
-        )(rng, f, r)
-        print(f'{t}s timeout \t r: {r}')
-        print(f'f(S): {f.value(S)}')
+    out_csv_filename = os.path.join(output_benchmarks, f'{cfg.obj.objective}.csv')
+    print(f'Creating {out_csv_filename}...')
+
+    with open(out_csv_filename, 'w+') as out_csv:
+
+        for f, r in conf_utils.get_objective(rng, cfg=cfg):
+            print(f'Computing exact maximum for n={f.n}, b={f.b}, r={r}...')
+            x_star, exact_max = max(((x, f.value(x)) for x in utils.powerset(f) if np.sum(x) <= r), key=utils.snd)
+            print(f'max(x) s.t. |x| <= {r}')
+            print(f'x*: {x_star}; f(x*): {exact_max}') 
+
+            # initialize BenchmarkDF for current batch
+            benchmark_df = BenchmarkDF(n=f.n, b=f.b, r=r, opt=exact_max, out_csv=out_csv)
+
+            for timeout_s in cfg.runtime.timeouts:
+                print(f'{timeout_s}s timeout')
+
+                for n_sample in range(1, cfg.runtime.n_samples + 1):
+                    print(f'samples: {n_sample}/{cfg.runtime.n_samples}')
+                    x = timeout.break_after(seconds=timeout_s)(
+                        algo.stochastic_greedy_norm
+                    )(rng, f, r)
+                    approx_max = f.value(x)
+                    approx_ratio = approx_max / exact_max
+                    print(f'x: {x}')
+                    print(f'f(x): {approx_max}')
+                    print(f'f(x) / f(x*): {approx_ratio}')
+                    print('')
+
+                    benchmark_df.add(i=n_sample, timeout_s=timeout_s, approx=approx_max)
+                
+                print('')
+
+            # append batch to the out_csv file
+            benchmark_df.write()
 
 
 if __name__ == '__main__':
-    run()
+    benchmark()
