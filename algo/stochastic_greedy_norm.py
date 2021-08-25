@@ -32,7 +32,7 @@ def stochastic_greedy_norm(rng: np.random.Generator, f: Objective, r: int, eps: 
         # How should we deal with the other cases?
         q = utils.random_vector_with_norm(rng, f=f, norm=s)
 
-        # e = argmax_{e \in supp(q)} \Delta(e | x)
+        # e \gets \argmax_e \{ f(\mathbf{1}_e\ |\ \mathbf{x}) | e \in supp(q) \wedge x_e < b \}
         e, _ = max((
           (e, f.value(x + utils.char_vector(f, e)) - f.value(x)) for e, qe in enumerate(q)
           if qe > 0 and x[e] < f.b
