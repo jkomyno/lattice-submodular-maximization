@@ -1,1 +1,1 @@
-from .stochastic_greedy_norm import stochastic_greedy_norm
+from .stochastic_greedy_norm import stochastic_greedy_norm, stochastic_greedy_norm_it
