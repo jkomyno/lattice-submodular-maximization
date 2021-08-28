@@ -9,7 +9,13 @@ selected:
 
 defaults:
   # integer-lattice submodular function to maximize
-  - obj: 'demo_non_monotone'
+  - obj: 'demo_monotone'
+
+  # algorithm to benchmark
+  - algo: 'SGN-III'
   
   # specify the timeouts for the benchmarks
   - runtime: 'laptop'
+
+  # run multiple configurations in parallel
+  - override hydra/launcher: joblib
