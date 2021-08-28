@@ -23,4 +23,5 @@ class DemoNonMonotone(Objective):
         """
         Value oracle for demo non-monotone maximization
         """
+        super().value(x)
         return x @ self.w

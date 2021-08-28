@@ -24,4 +24,5 @@ class DemoMonotone(Objective):
         """
         Value oracle for demo monotone maximization
         """
+        super().value(x)
         return x @ self.w

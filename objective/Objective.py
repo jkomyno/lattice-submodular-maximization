@@ -16,6 +16,9 @@ class Objective(ABC):
         self._b = b
         self._B = np.full((self._n,), b)
 
+        # keep track of the number of oracle calls
+        self._n_calls = 0
+
     @property
     def V(self) -> List[int]:
         """
@@ -44,16 +47,30 @@ class Objective(ABC):
         """
         return self._n
 
+    @property
+    def n_calls(self) -> int:
+        """
+        Return the number of oracle calls
+        """
+        return self._n_calls
+
     def value(self, x: NDArray[Int64]) -> int:
         """
         Value oracle for the submodular problem.
         :param x: subset of the ground set
         :return: value oracle for S in the submodular problem
         """
-        pass
+        self._n_calls += 1
+        return None
 
     def marginal_gain(self, x: NDArray[Int64], y: NDArray[Int64]) -> int:
         """
         Value oracle for f(x | y) := f(x + y) - f(y)
         """
         return self.value(x + y) - self.value(y)
+
+    def reset(self):
+        """
+        Reset the number of oracle calls to zero.
+        """
+        self._n_calls = 0
