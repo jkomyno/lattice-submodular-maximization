@@ -1,13 +1,13 @@
 import math
 import numpy as np
 from nptyping import NDArray, Int64
-from typing import Iterator
 from objective import Objective
+from typing import Iterator
 import utils
 
 
-def stochastic_greedy_norm(rng: np.random.Generator,
-                           f: Objective, r: int, eps: float = None) -> NDArray[Int64]:
+def SGN_II(rng: np.random.Generator,
+           f: Objective, r: int, eps: float = None) -> NDArray[Int64]:
     """
     Randomized algorithm for integer-lattice submodular maximization of monotone functions with cardinality
     constraints in linear time.
@@ -21,21 +21,19 @@ def stochastic_greedy_norm(rng: np.random.Generator,
         eps = 1 / (4 * f.n)
 
     # compute s, the sample size
-    s = int(((f.n * f.b) / r) * math.log(1 / eps))
+    s = math.ceil((f.n / r) * math.log(1 / eps))
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
 
     for _ in range(r):
-        # sub-sampling step, sample a random vector with Manhattan norm equal to s.
-        # s >= r as long as 0 < eps <= e^\frac{-r^2}{n}, so in these cases q != x.
-        # How should we deal with the other cases?
-        q = utils.random_vector_with_norm(rng, f=f, norm=s)
-
-        # e \gets \argmax_e \{ f(\mathbf{1}_e\ |\ \mathbf{x}) | e \in supp(q) \wedge x_e < b \}
+        # sub-sampling step
+        sample_space = np.where(x < f.b)[0]
+        q = rng.choice(sample_space, size=s, replace=True)
+        
+        # e \gets \argmax_e \{ f(\mathbf{1}_e\ |\ \mathbf{x}) | e \in supp(q) \}
         e, _ = max((
-          (e, f.value(x + utils.char_vector(f, e)) - f.value(x)) for e, qe in enumerate(q)
-          if qe > 0 and x[e] < f.b
+          (e, f.marginal_gain(utils.char_vector(f, e), x)) for e in q
         ), key=utils.snd)
         one_e = utils.char_vector(f, e)
 
@@ -46,8 +44,8 @@ def stochastic_greedy_norm(rng: np.random.Generator,
     return x
 
 
-def stochastic_greedy_norm_it(rng: np.random.Generator,
-                              f: Objective, r: int, eps: float = None) -> Iterator[NDArray[Int64]]:
+def SGN_II_it(rng: np.random.Generator,
+              f: Objective, r: int, eps: float = None) -> Iterator[NDArray[Int64]]:
     """
     Randomized algorithm for integer-lattice submodular maximization of monotone functions with cardinality
     constraints in linear time.
@@ -61,31 +59,25 @@ def stochastic_greedy_norm_it(rng: np.random.Generator,
         eps = 1 / (4 * f.n)
 
     # compute s, the sample size
-    s = int(((f.n * f.b) / r) * math.log(1 / eps))
+    s = math.ceil((f.n / r) * math.log(1 / eps))
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
-    yield x
 
-    for i in range(r):
-        # sub-sampling step, sample a random vector with Manhattan norm equal to s.
-        # s >= r as long as 0 < eps <= e^\frac{-r^2}{n}, so in these cases q != x.
-        # How should we deal with the other cases?
-        q = utils.random_vector_with_norm(rng, f=f, norm=s)
+    for _ in range(r):
+        yield x
+        # sub-sampling step
+        sample_space = np.where(x < f.b)[0]
+        q = rng.choice(sample_space, size=s, replace=True)
 
-        # e \gets \argmax_e \{ f(\mathbf{1}_e\ |\ \mathbf{x}) | e \in supp(q) \wedge x_e < b \}
+        # e \gets \argmax_e \{ f(\mathbf{1}_e\ |\ \mathbf{x}) | e \in supp(q) \}
         e, _ = max((
-          (e, f.value(x + utils.char_vector(f, e)) - f.value(x)) for e, qe in enumerate(q)
-          if qe > 0 and x[e] < f.b
+          (e, f.marginal_gain(utils.char_vector(f, e), x)) for e in q
         ), key=utils.snd)
         one_e = utils.char_vector(f, e)
 
         # We add to x the element in the sample q that increases the value of f
         # the most.
-        y = x + one_e
-
-        # update the approximated solution x
-        x = y
-        yield y
+        x = x + one_e
 
     yield x
