@@ -19,6 +19,8 @@ def soma_DR_I(f: Objective, c: NDArray[Int64], r: int, eps: float) -> NDArray[In
     theta = d
     stop_theta = (eps / r) * d
 
+    
+
     while theta >= stop_theta:
         for e in f.V:
             one_e = utils.char_vector(f, e)
