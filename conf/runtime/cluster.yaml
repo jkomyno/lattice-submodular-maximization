@@ -6,3 +6,6 @@ timeouts:
 
 # number of times the same experiment is repeated
 n_samples: 10
+
+# multiplier for n, b, r in obj/*.yaml
+multiplier: 1
