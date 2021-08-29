@@ -1,31 +1,29 @@
-from typing import Iterator, Tuple, List
 import numpy as np
 from omegaconf import DictConfig
 from objective import Objective
-from algo import SGN_I, SGN_II, SGN_III, SSG, soma_DR_I
-from utils import bridge
+from algo import SGL_I, SGL_II, SGN_III, SSG, soma_DR_I
 
 
 ALGO_MAP = {
-    'SGN-I': lambda *args: load_SGN_I(*args),
-    'SGN-II': lambda *args: load_SGN_II(*args),
+    'SGL-I': lambda *args: load_SGL_I(*args),
+    'SGL-II': lambda *args: load_SGL_II(*args),
     'SGN-III': lambda *args: load_SGN_III(*args),
     'SSG': lambda *args: load_SSG(*args),
     'Soma-DR-I': lambda *args: load_soma_DR_I(*args),
 }
 
 
-def load_SGN_I(rng: np.random.Generator, f: Objective, r: int):
+def load_SGL_I(rng: np.random.Generator, f: Objective, r: int):
     def load():
-        x = SGN_I(rng, f, r, eps=get_eps(f))
+        x = SGL_I(rng, f, r, eps=get_eps(f))
         return f.value(x)
 
     return load
 
 
-def load_SGN_II(rng: np.random.Generator, f: Objective, r: int):
+def load_SGL_II(rng: np.random.Generator, f: Objective, r: int):
     def load():
-        x = SGN_II(rng, f, r, eps=get_eps(f))
+        x = SGL_II(rng, f, r, eps=get_eps(f))
         return f.value(x)
 
     return load
@@ -63,7 +61,7 @@ def get_eps(f: Objective):
 def get_algo(rng: np.random.Generator, f: Objective,
              r: int, cfg: DictConfig):
     """
-    Return an instance of the selected set-submodular objective
+    Return an instance of the selected integer-lattice submodular objective
     :param rng: numpy random generator instance
     :param f: integer lattice submodular function
     :param r: cardinality constraint
