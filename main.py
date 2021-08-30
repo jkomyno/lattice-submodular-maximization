@@ -155,6 +155,9 @@ def benchmark(cfg: DictConfig) -> None:
     #  Run the maximizers  #
     ########################
 
+    # run deterministic algorithms once
+    n_samples = cfg.runtime.n_samples if cfg.algo.is_randomized else 1
+
     out_csv_filename = os.path.join(output_benchmarks, f'{cfg.obj.objective}-{cfg.algo.algorithm}.csv')
     print(f'Creating {out_csv_filename}...')
 
@@ -166,7 +169,7 @@ def benchmark(cfg: DictConfig) -> None:
 
             # initialize BenchmarkDF for current batch
             with BenchmarkDF(n=f.n, b=f.b, r=r, out_csv=out_csv, verbose=True) as benchmark_df:
-                for n_sample in range(1, cfg.runtime.n_samples + 1):
+                for n_sample in range(1, n_samples + 1):
 
                     t_start = time.time_ns()
                     approx = maximizer()

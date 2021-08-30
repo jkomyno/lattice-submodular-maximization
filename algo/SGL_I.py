@@ -39,7 +39,7 @@ def SGL_I(rng: np.random.Generator,
         # the most.
         x = x + one_e
 
-    assert np.sum(x) <= r
+    assert np.sum(x) == r
     return x
 
 
@@ -78,5 +78,5 @@ def SGL_I_it(rng: np.random.Generator,
         # the most.
         x = x + one_e
 
-    assert np.sum(x) <= r
+    assert np.sum(x) == r
     yield x
