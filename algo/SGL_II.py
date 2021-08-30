@@ -46,8 +46,6 @@ def SGL_II(rng: np.random.Generator,
             for e in Q
         ]
 
-        print(f'e_k_best: {e_k_best}')
-
         # lazy list of (one_e, best_k)
         # one_e_k_best = utils.map_fst(lambda e: utils.char_vector(f, e), e_k_best)
         one_e_k_best = map(lambda ek: (utils.char_vector(f, ek[0]) , ek[1]), e_k_best)
