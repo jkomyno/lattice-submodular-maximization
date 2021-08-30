@@ -29,7 +29,8 @@ $ python -m pip install -r requirements.txt
 Run:
 
 ```bash
-python main.py -m obj=demo_monotone algo=Soma-DR-I,SSG,SGL-I,SGL-II,SGN-III
+python main.py -m obj=demo_monotone,facility_location,budget_allocation \
+  algo=Soma-DR-I,Soma-II,SSG,SGL-I,SGL-II,SGN-III
 ```
 
 ## Configuration
