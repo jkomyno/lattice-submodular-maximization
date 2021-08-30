@@ -12,9 +12,9 @@ import timeout
 import algo
 import set_algo
 
-# numpy random generator instance
-rng: np.random.Generator = np.random.default_rng(2021)
 
+# numpy random generator instance
+rng: np.random.Generator = utils.get_rng()
 
 
 @hydra.main(config_path='conf', config_name='config')
