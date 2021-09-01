@@ -21,17 +21,20 @@ def SGN_III(rng: np.random.Generator,
         eps = 1 / (4 * f.n)
 
     # compute s, the sample size
-    s = math.ceil((f.n / r) * math.log(1 / eps))
+    s = utils.compute_sample_size(n=f.n, r=r, eps=eps)
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
 
+    # prev_value keeps track of the value of f(x)
+    prev_value = 0
+
     # iteration counter
     t = 0
 
-    # d = max((f.value(utils.char_vector(f, e)) for e in f.V))
-    # theta = d
-    # stop_theta = (eps / r) * d
+    d = max((f.value(utils.char_vector(f, e)) for e in f.V))
+    theta = d
+    stop_theta = (eps / r) * d
 
     # norm keeps track of the L-1 norm of x
     norm = 0
@@ -39,39 +42,38 @@ def SGN_III(rng: np.random.Generator,
     while norm < r and t < r:
         # random sub-sampling step
         sample_space = np.where(x < f.b)[0]
-        Q = set(rng.choice(sample_space, size=s, replace=True))
+        Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
 
-        # find k e maximal for f such that x[e] + k * 1[e] <= b
-        # AND x[e] + k * 1[e] <= r - \|x\|_1
-        # --->
-        # x[e] + k * 1[e] <= min(b, r - \|x\|_1)
-        # k * 1[e] <= min(b, r - \|x\|_1) - x[e]
+        for e in Q:
+            one_e = utils.char_vector(f, e)
+            
+            # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta
+            k, candidate_x, candidate_value = max((
+                (k, candidate_x := x + k * one_e, candidate_value := f.value(candidate_x))
+                for k in range(1, min(f.b - x[e], r - norm) + 1)
+                if candidate_value - prev_value >= k * theta
+            ), key=utils.snd, default=(None, None))
 
-        e_ks: List(Tuple[int, Iterator[int]]) = (
-            (e, range(1, min(f.b, r - norm) - x[e] + 1))
-            for e in Q
-        )
-        one_e_ks = map(lambda ek: (utils.char_vector(f, ek[0]) , ek[1]), e_ks)
+            k = max((
+                (mg := f.marginal_gain(k * one_e, x), k)
+                for k in range(1, min(f.b - x[e], r - norm) + 1)
+                if mg >= k * theta
+            ), key=utils.snd, default=(None, None, None))
 
-        # instead of picking the greedy +1 among the random subset pick the one
-        # that maximises the binary search of moving along that component,
-        # like a hybrid of the soma and sgm methods.
-        # x[e]=x[e]+k where k is argmax of f(x+k*1_e)
-        _, one_e, k = max((
-            (f.value(x + k * one_e), one_e, k)
-            for one_e, ks in one_e_ks
-            for k in ks
-        ), key=utils.fst)
+            if k == None:
+                continue
 
-        # We add to x the element in the sample q that increases the value of f
-        # the most.
-        x = x + k * one_e
-        norm += k
+            if candidate_value >= prev_value:
+                # We add to x the element in the sample q that increases the value of f
+                # the most.
+                x = candidate_x
+                norm += k
+
+        # update theta
+        theta = max(theta * (1 - eps), stop_theta)
 
         # increment iteration counter
         t += 1
-
-        # theta = max(theta(1-eps), stop_theta)
 
     assert norm <= r
     return x
