@@ -1,22 +1,23 @@
 from typing import Iterator, Tuple, List, Callable
+import math
 import numpy as np
-import networkx as nx
 from omegaconf import DictConfig
 from objective import Objective, DemoMonotone, DemoNonMonotone, FacilityLocation, BudgetAllocation
-import utils
+import dataset_utils
 
 
 OBJ_MAP = {
-    'demo_monotone': lambda *args: load_demo_monotone(*args),
-    'demo_non_monotone': lambda *args: load_demo_non_monotone(*args),
-    'facility_location': lambda *args: load_facility_location(*args),
-    'budget_allocation': lambda *args: load_budget_allocation(*args),
+    'demo_monotone': lambda **kwargs: load_demo_monotone(**kwargs),
+    'demo_non_monotone': lambda **kwargs: load_demo_non_monotone(**kwargs),
+    'facility_location': lambda **kwargs: load_facility_location(**kwargs),
+    'budget_allocation': lambda **kwargs: load_budget_allocation(**kwargs),
 }
 
 
 def load_demo_monotone(rng: np.random.Generator,
                        multiply: Callable[[int], int],
-                       params) -> Iterator[Tuple[Objective, int]]:
+                       params,
+                       **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random set-modular, monotone function
     :param rng: numpy random generator instance
@@ -31,7 +32,8 @@ def load_demo_monotone(rng: np.random.Generator,
 
 def load_demo_non_monotone(rng: np.random.Generator,
                            multiply: Callable[[int], int],
-                           params) -> Iterator[Tuple[Objective, int]]:
+                           params,
+                           **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random set-modular, non_monotone function
     :param rng: numpy random generator instance
@@ -45,9 +47,9 @@ def load_demo_non_monotone(rng: np.random.Generator,
         yield (DemoNonMonotone(rng, n=n, b=b), r)
 
 
-def load_facility_location(rng: np.random.Generator,
-                           multiply: Callable[[int], int],
-                           params) -> Iterator[Tuple[Objective, int]]:
+def load_facility_location(basedir: str,
+                           params,
+                           **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random integer-lattice submodular, monotone function that models
     the Facility Location problem.
@@ -55,29 +57,18 @@ def load_facility_location(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    nbr: List[Tuple[int, int, int]] = list(map(lambda t: map(multiply, t), params.benchmark.nbr))
-
-    for (n, b, r) in nbr:
-
-        # p is the probability that any two u, v \in V are connected
-        p = 1
-
-        # m is the number of target users
-        m = n * 3
-
-        # generate a random graph weighted bipartite graph 
-        G: nx.Graph = nx.bipartite.random_graph(n, m, p, directed=False, seed=utils.get_seed())
-
-        weights = rng.integers(low=0, high=10, size=(len(G.edges), ))
-        for (u, v), weight in zip(G.edges(), weights):
-            G.edges[u, v]['weight'] = weight
-
+    print(f'Loading Yahoo! Data...')
+    G, _ = dataset_utils.import_yahoo_data(basedir)
+    print(f'...Yahoo! Data successfully loaded')
+    br: List[Tuple[int, int]] = params.benchmark.br
+    
+    for (b, r) in br:
         yield (FacilityLocation(G=G, b=b), r)
 
 
-def load_budget_allocation(rng: np.random.Generator,
-                           multiply: Callable[[int], int],
-                           params) -> Iterator[Tuple[Objective, int]]:
+def load_budget_allocation(basedir: str,
+                           params,
+                           **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random integer-lattice DR-submodular, monotone function that models
     the Budget Allocation problem.
@@ -85,30 +76,26 @@ def load_budget_allocation(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    nbr: List[Tuple[int, int, int]] = list(map(lambda t: map(multiply, t), params.benchmark.nbr))
-
-    for (n, b, r) in nbr:
-
-        # p is the probability that any two u, v \in V are connected
-        p = 0.8
-
-        # m is the number of target customers
-        m = n * 3
-
-        # generate a random graph weighted bipartite graph 
-        G: nx.Graph = nx.bipartite.random_graph(n, m, p, directed=False, seed=utils.get_seed())
-
-        weights = rng.uniform(low=0.0, high=0.4, size=(len(G.edges), ))
-        for (u, v), weight in zip(G.edges(), weights):
-            G.edges[u, v]['weight'] = weight
-
+    print(f'Loading Yahoo! Data...')
+    G, avg_price = dataset_utils.import_yahoo_data(basedir)
+    print(f'...Yahoo! Data successfully loaded')
+    br: List[Tuple[int, int]] = params.benchmark.br
+    
+    for b_factor, r_factor in br:
+        print(f'b_factor: {b_factor}')
+        print(f'r_factor: {r_factor}')
+        b = math.ceil(avg_price * b_factor)
+        r = math.ceil(b * r_factor)
         yield (BudgetAllocation(G=G, b=b), r)
 
 
-def get_objective(rng: np.random.Generator, cfg: DictConfig) -> Iterator[Tuple[Objective, int]]:
+def get_objective(rng: np.random.Generator,
+                  basedir: str,
+                  cfg: DictConfig) -> Iterator[Tuple[Objective, int]]:
     """
     Return an instance of the selected set-submodular objective
     :param rng: numpy random generator instance
+    :param basedir: base directory relative to main.py
     :param cfg: Hydra configuration dictionary
     """
     objective_name = cfg.obj.objective
@@ -118,4 +105,7 @@ def get_objective(rng: np.random.Generator, cfg: DictConfig) -> Iterator[Tuple[O
         return int(multiplier * a)
 
     print(f'Loading f: {objective_name}\n')
-    return OBJ_MAP[objective_name](rng, multiply, cfg.obj)
+    return OBJ_MAP[objective_name](rng=rng,
+                                   multiply=multiply,
+                                   params=cfg.obj,
+                                   basedir=basedir)

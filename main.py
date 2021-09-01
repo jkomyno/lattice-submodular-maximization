@@ -162,7 +162,7 @@ def benchmark(cfg: DictConfig) -> None:
     print(f'Creating {out_csv_filename}...')
 
     with open(out_csv_filename, 'w+') as out_csv:
-        for f, r in conf_utils.get_objective(rng, cfg=cfg):
+        for f, r in conf_utils.get_objective(rng=rng, basedir=basedir, cfg=cfg):
 
             # import the selected algorithm to maximize f w.r.t. the cardinality constraint r
             maximizer = conf_utils.get_algo(rng, f, r, cfg=cfg)
