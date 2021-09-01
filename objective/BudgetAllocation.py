@@ -1,6 +1,6 @@
 import networkx as nx
-from typing import Set
 from nptyping import NDArray, Int64
+from typing import List
 import utils
 from .Objective import Objective
 
@@ -25,8 +25,10 @@ class BudgetAllocation(Objective):
       https://arxiv.org/pdf/1606.05615.pdf (§6, Optimal budget allocation with
       continuous assignments)
       """
-      S, T = nx.bipartite.sets(G)
-      super().__init__(list(S), b)
+      V: List[int] = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
+      T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
+
+      super().__init__(V, b)
       self.G = G
 
       # set of advertiser customers
@@ -40,7 +42,7 @@ class BudgetAllocation(Objective):
         # self.G[s][t]['weight'] models the influence probability of
         # channel s to customer t
         return 1 - utils.prod((
-          (1 - self.G[s][t]['weight']) ** x[s]
+          ((1 - (self.G[s][t]['weight'] if self.G.has_edge(s, t) else 0)) ** x[s])
           for (_, s) in self.G.edges(t)
         ))
 

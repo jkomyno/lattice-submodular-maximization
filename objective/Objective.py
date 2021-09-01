@@ -61,6 +61,10 @@ class Objective(ABC):
         :return: value oracle for S in the submodular problem
         """
         self._n_calls += 1
+        
+        if self._n_calls % 10000 == 0:
+            print(f'Oracle calls: {self._n_calls}')
+
         return None
 
     def marginal_gain(self, x: NDArray[Int64], y: NDArray[Int64]) -> int:

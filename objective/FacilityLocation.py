@@ -1,28 +1,31 @@
 import networkx as nx
 from typing import Set
 from nptyping import NDArray, Int64
+from typing import List
 from .Objective import Objective
 
 
 class FacilityLocation(Objective):
     def __init__(self, G: nx.Graph, b: int):
-      """
-      Generate an integer-lattice smodular, monotone function for the
-      facility location problem.
-      We are given a set V of facilities, and we aim at deciding how large
-      facilities are opened up in order to serve a set of m customers, where we
-      represent scale of facilities as integers 0, 1, ..., b ("0" means we do
-      not open a facility). The goal is to decide how large each facility should
-      be in order to optimally serve a set T of customer.
+        """
+        Generate an integer-lattice smodular, monotone function for the
+        facility location problem.
+        We are given a set V of facilities, and we aim at deciding how large
+        facilities are opened up in order to serve a set of m customers, where we
+        represent scale of facilities as integers 0, 1, ..., b ("0" means we do
+        not open a facility). The goal is to decide how large each facility should
+        be in order to optimally serve a set T of customer.
 
-      http://web.cs.ucla.edu/~baharan//papers/bian17guaranteed_long.pdf (§6, Facility Location)
-      """
-      V, T = nx.bipartite.sets(G)
-      super().__init__(list(V), b)
-      self.G = G
+        http://web.cs.ucla.edu/~baharan//papers/bian17guaranteed_long.pdf (§6, Facility Location)
+        """
+        V: List[int] = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
+        T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
 
-      # set of target customers
-      self.T: Set[int] = T
+        super().__init__(V, b)
+        self.G = G
+
+        # list of target customers
+        self.T = T
 
     def p(self, s: int, t: int, x_s: int) -> float:
         """
@@ -33,6 +36,9 @@ class FacilityLocation(Objective):
         :param t: index of the customer
         :param x_s: scale of the facility s
         """
+        if not self.G.has_edge(s, t):
+            return 0
+
         # w_st is the weight of the edge between the facility s and the
         # target customer t
         w_st = self.G[s][t]['weight']
@@ -45,7 +51,6 @@ class FacilityLocation(Objective):
         :param x: scale of all facilities
         """
         super().value(x)
-        
         return sum((
             max((
                 self.p(s, t, x_s)
