@@ -21,7 +21,7 @@ def SGL_I(rng: np.random.Generator,
         eps = 1 / (4 * f.n)
 
     # compute s, the sample size
-    s = math.ceil((f.n / r) * math.log(1 / eps))
+    s = utils.compute_sample_size(n=f.n, r=r, eps=eps)
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
@@ -29,7 +29,7 @@ def SGL_I(rng: np.random.Generator,
     for _ in range(r):
         # random sub-sampling step
         sample_space = np.where(x < f.b)[0]
-        Q = set(rng.choice(sample_space, size=s, replace=True))
+        Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
         
         # e \gets \argmax_{e \in Q} f(\mathbf{1}_e\ |\ \mathbf{x})
         one_e = max(map(lambda e: utils.char_vector(f, e), Q),

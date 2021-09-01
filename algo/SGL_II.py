@@ -21,7 +21,7 @@ def SGL_II(rng: np.random.Generator,
         eps = 1 / (4 * f.n)
 
     # compute s, the sample size
-    s = math.ceil((f.n / r) * math.log(1 / eps))
+    s = utils.compute_sample_size(n=f.n, r=r, eps=eps)
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
@@ -35,14 +35,13 @@ def SGL_II(rng: np.random.Generator,
     while norm < r and t < r:
         # random sub-sampling step
         sample_space = np.where(x < f.b)[0]
-        Q = set(rng.choice(sample_space, size=s, replace=True))
+        Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
 
         # lazy list of (e, best_k), where best_k is the highest k such that
         # f(x + k * 1_e) >= f(x) while making sure that the cardinality constraint
         # is respected
-
         e_k_best: Tuple[int, int] = [
-            (e, min(f.b, r - norm) - x[e])
+            (e, min(f.b - x[e], r - norm))
             for e in Q
         ]
 
