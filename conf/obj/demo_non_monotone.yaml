@@ -4,40 +4,54 @@ benchmark:
   # n: size of the ground set
   # b: upper bound of the lattice domain
   # r: cardinality constraint
+  # It must hold that b <= r and b * r < n
   nbr:
     -
-      - 5   # n
-      - 1   # b
-      - 2   # r
+      - 50     # n
+      - 5      # b
+      - 25     # r
     -
-      - 5   # n
-      - 2   # b
-      - 4   # r
+      - 50     # n
+      - 5      # b
+      - 50     # r
     -
-      - 5   # n
-      - 4   # b
-      - 8   # r
+      - 50     # n
+      - 25     # b
+      - 50     # r
     -
-      - 5   # n
-      - 10  # b
-      - 20  # r
+      - 50     # n
+      - 25     # b
+      - 100    # r
     -
-      - 10  # n
-      - 1   # b
-      - 3   # r
+      - 50     # n
+      - 125    # b
+      - 125    # r
     -
-      - 10  # n
-      - 2   # b
-      - 6   # r
+      - 50     # n
+      - 125    # b
+      - 125    # r
+
     -
-      - 10  # n
-      - 4   # b
-      - 12  # r
+      - 200    # n
+      - 20     # b
+      - 100    # r
     -
-      - 15  # n
-      - 1   # b
-      - 6   # r
+      - 200    # n
+      - 20     # b
+      - 200    # r
     -
-      - 15  # n
-      - 2   # b
-      - 6   # r
+      - 200    # n
+      - 100    # b
+      - 200    # r
+    -
+      - 200    # n
+      - 100    # b
+      - 400    # r
+    -
+      - 200    # n
+      - 600    # b
+      - 600    # r
+    -
+      - 200    # n
+      - 600    # b
+      - 600    # r

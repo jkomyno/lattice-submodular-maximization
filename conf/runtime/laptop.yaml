@@ -7,4 +7,4 @@ timeouts:
 n_samples: 10
 
 # multiplier for n, b, r in obj/*.yaml
-multiplier: 0.2
+multiplier: 1

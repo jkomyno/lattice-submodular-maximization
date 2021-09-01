@@ -1,57 +1,16 @@
 objective: 'facility_location'
 
 benchmark:
-  # n: size of the ground set
   # b: upper bound of the lattice domain
   # r: cardinality constraint
   # It must hold that b <= r and b * r < n
-  nbr:
+  br:
     -
-      - 50     # n
-      - 250    # b
-      - 500    # r
+      - 3
+      - 3
     -
-      - 50     # n
-      - 375    # b
-      - 500    # r
+      - 3
+      - 6
     -
-      - 50     # n
-      - 500    # b
-      - 500    # r
-    -
-      - 50     # n
-      - 250    # b
-      - 1000   # r
-    -
-      - 50     # n
-      - 375    # b
-      - 1000   # r
-    -
-      - 50     # n
-      - 500    # b
-      - 1000   # r
-
-    -
-      - 100    # n
-      - 500    # b
-      - 1000   # r
-    -
-      - 100    # n
-      - 750    # b
-      - 1000   # r
-    -
-      - 100    # n
-      - 1000   # b
-      - 1000   # r
-    -
-      - 100    # n
-      - 500    # b
-      - 2000   # r
-    -
-      - 100    # n
-      - 750    # b
-      - 2000   # r
-    -
-      - 100    # n
-      - 1000   # b
-      - 2000   # r
+      - 3
+      - 9
