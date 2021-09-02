@@ -30,7 +30,7 @@ Run:
 
 ```bash
 python main.py -m obj=demo_monotone,facility_location,budget_allocation \
-  algo=Soma-DR-I,Soma-II,SSG,SGL-I,SGL-II,SGN-III
+  algo=Soma-DR-I,Soma-II,SSG,SGL-I,SGL-II,SGL-III
 ```
 
 ## Configuration
