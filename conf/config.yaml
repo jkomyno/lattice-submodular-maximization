@@ -14,10 +14,10 @@ defaults:
   - obj: 'demo_monotone'
 
   # algorithm to benchmark
-  - algo: 'SGN-III'
+  - algo: 'SGL-I'
   
   # specify the timeouts for the benchmarks
   - runtime: 'laptop'
 
   # run multiple configurations in parallel
-  - override hydra/launcher: joblib
+  # - override hydra/launcher: joblib

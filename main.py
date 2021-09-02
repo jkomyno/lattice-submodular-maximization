@@ -16,7 +16,7 @@ import set_algo
 # numpy random generator instance
 rng: np.random.Generator = utils.get_rng()
 
-
+"""
 @hydra.main(config_path='conf', config_name='config')
 def benchmark_with_timeout(cfg: DictConfig) -> None:
     # basedir w.r.t. main.py
@@ -140,6 +140,7 @@ def bridge_comparison(cfg: DictConfig) -> None:
         print(f'f(x) / f\'(S): {obj_ratio}')
         print(f'time f(x) / time f\'(S): {time_ratio}')
         print('')
+"""
 
 
 @hydra.main(config_path='conf', config_name='config')
@@ -172,13 +173,14 @@ def benchmark(cfg: DictConfig) -> None:
                 for n_sample in range(1, n_samples + 1):
 
                     t_start = time.time_ns()
-                    approx = maximizer()
+                    x, approx = maximizer()
                     time_ns = time.time_ns() - t_start
 
                     # n_calls is the number of oracle calls
                     n_calls = f.n_calls
 
-                    benchmark_df.add(i=n_sample, approx=approx, n_calls=n_calls, time_ns=time_ns)
+                    benchmark_df.add(i=n_sample, approx=approx, n_calls=n_calls,
+                                     time_ns=time_ns, x=x)
 
                     # reset the counter of oracle calls for f
                     f.reset()

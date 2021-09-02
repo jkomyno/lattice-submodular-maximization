@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from io import TextIOWrapper
+from nptyping import NDArray, Int32
 
 
 class BenchmarkDF(object):
@@ -28,6 +29,7 @@ class BenchmarkDF(object):
             ('approx', np.float64),
             ('n_calls', np.int64),
             ('time_ms', np.int64),
+            ('x', object)
         ]
         
         self.buf = []
@@ -68,7 +70,8 @@ class BenchmarkDF(object):
         self.__reset_df()
         self.buf = []
 
-    def add(self, i: int, approx: float, n_calls: int, time_ns: float):
+    def add(self, i: int, approx: float, n_calls: int,
+            time_ns: float, x: NDArray[Int32]):
         """
         Add a row to the self.df dataframe
         """
@@ -87,5 +90,6 @@ class BenchmarkDF(object):
                 'approx': approx,
                 'n_calls': n_calls,
                 'time_ms': time_ms,
+                'x': x,
             }
         )
