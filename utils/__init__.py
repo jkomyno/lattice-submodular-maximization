@@ -1,6 +1,7 @@
 from .char_vector import char_vector
 from .fst import fst
 from .snd import snd
+from .trd import trd
 from .map_fst import map_fst
 from .get_last import get_last
 from .powerset import powerset
