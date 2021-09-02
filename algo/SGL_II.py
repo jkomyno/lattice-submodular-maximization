@@ -2,12 +2,12 @@ import math
 import numpy as np
 from nptyping import NDArray, Int64
 from objective import Objective
-from typing import Iterator, Tuple
+from typing import Tuple
 import utils
 
 
 def SGL_II(rng: np.random.Generator,
-           f: Objective, r: int, eps: float = None) -> NDArray[Int64]:
+           f: Objective, r: int, eps: float = None) -> Tuple[NDArray[Int64], float]:
     """
     Randomized algorithm for DR-ubmodular maximization of monotone functions
     defined on the integer lattice with cardinality constraints.
@@ -25,6 +25,9 @@ def SGL_II(rng: np.random.Generator,
 
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
+
+    # prev_value keeps track of the value of f(x)
+    prev_value = 0
 
     # norm keeps track of the L-1 norm of x
     norm = 0
@@ -49,16 +52,22 @@ def SGL_II(rng: np.random.Generator,
         # one_e_k_best = utils.map_fst(lambda e: utils.char_vector(f, e), e_k_best)
         one_e_k_best = map(lambda ek: (utils.char_vector(f, ek[0]) , ek[1]), e_k_best)
 
-        _, one_e, k = max(((f.marginal_gain(k * one_e, x), one_e, k)
-                           for one_e, k in one_e_k_best), key=utils.fst)
-
         # We add to x the element in the sample q that increases the value of f
         # the most.
-        x = x + k * one_e
+        x, prev_value, marginal_gain, k = max((
+            (
+                candidate_x := x + k * one_e,
+                candidate_value := f.value(candidate_x),
+                candidate_value - prev_value,
+                k
+            ) for one_e, k in one_e_k_best
+        ), key=utils.trd)
+
+        # update norm
         norm += k
 
         # increment iteration counter
         t += 1
 
     assert np.sum(x) <= r
-    return x
+    return x, prev_value
