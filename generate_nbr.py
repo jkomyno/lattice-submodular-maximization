@@ -4,7 +4,7 @@ def generate_nbr(n_base: int, b_base: int):
         2,
         5,
         10,
-        50
+        15,
     ]
 
     b_factors = [
@@ -13,16 +13,15 @@ def generate_nbr(n_base: int, b_base: int):
         4,
         8,
         12,
-        25,
-        50
+        16,
+        24,
     ]
 
     r_factors = [
         1,
         1.5,
         2,
-        5,
-        10
+        4,
     ]
 
     for n_factor in n_factors:
