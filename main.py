@@ -180,7 +180,7 @@ def benchmark(cfg: DictConfig) -> None:
                     n_calls = f.n_calls
 
                     benchmark_df.add(i=n_sample, approx=approx, n_calls=n_calls,
-                                     time_ns=time_ns, x=x)
+                                     time_ns=time_ns)
 
                     # reset the counter of oracle calls for f
                     f.reset()
