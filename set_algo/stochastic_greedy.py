@@ -30,7 +30,8 @@ def stochastic_greedy(rng: np.random.Generator, f: SetObjective,
     while len(A) < r:
         # R is a random subset obtained by sampling s random elements
         # from V - A
-        R: NDArray[Int64] = rng.choice(list(f.V - A), size=s, replace=False)
+        sample_space = list(f.V - A)
+        R: NDArray[Int64] = rng.choice(f.V - A, size=min(s, len(sample_space)), replace=False)
         prev_value, marginal_gain, a = max((
             (candidate_value := f.value(A | {a}), candidate_value - prev_value, a)
             for a in R
