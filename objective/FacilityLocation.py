@@ -1,5 +1,5 @@
 import networkx as nx
-from typing import Set
+import numpy as np
 from nptyping import NDArray, Int64
 from typing import List
 from .Objective import Objective
@@ -22,28 +22,10 @@ class FacilityLocation(Objective):
         T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
 
         super().__init__(V, b)
-        self.G = G
+        self.W = nx.adjacency_matrix(G)
 
         # list of target customers
         self.T = T
-
-    def p(self, s: int, t: int, x_s: int) -> float:
-        """
-        Model the value in service provided to the customer t for the facility
-        s of scale x_s.
-        It's a monotone, normalized, non-negative function.
-        :param s: index of the facility
-        :param t: index of the customer
-        :param x_s: scale of the facility s
-        """
-        if not self.G.has_edge(s, t):
-            return 0
-
-        # w_st is the weight of the edge between the facility s and the
-        # target customer t
-        w_st = self.G[s][t]['weight']
-
-        return w_st * x_s * ((self.b + 1 - x_s) ** 0.5) / self.b
 
     def value(self, x: NDArray[Int64]) -> float:
         """
@@ -51,10 +33,11 @@ class FacilityLocation(Objective):
         :param x: scale of all facilities
         """
         super().value(x)
-        return sum((
-            max((
-                self.p(s, t, x_s)
-                for s, x_s in enumerate(x)
-            ))
-            for t in self.T
-        ))
+
+        # W_st is the (|S| * |T|) weight matrix
+        W_st = np.array([[self.W[s, t] for s in self.V] for t in self.T])
+
+        # m is the application of p_st to W_st
+        M = x * W_st * ((self.b + 1 - x) ** 0.5) / self.b
+
+        return np.sum(np.max(M, axis=1))
