@@ -27,42 +27,27 @@ def soma_DR_I(f: Objective, c: NDArray[Int64], r: int, eps: float) -> Tuple[NDAr
     theta = d
     stop_theta = (eps / r) * d
 
-    def constraint_k_theta(prev_value: float, theta: float):
-        """
-        Higher-order function to be applied to filter.
-        :param prev_value: value of f(x) at the previous iteration
-        :param theta: decreasing threshold
-        """
-        def helper(t: Tuple[int, NDArray[Int64], float]) -> bool:
-            """
-            Returns true iff f(k * 1_e | x) > k * theta
-            :param t: (k, x + k * 1_e, f(x + k * 1_e)) tuple
-            """
-            k, _, candidate_value = t
-            return candidate_value - prev_value > k * theta
-
-        return helper
-
     while theta >= stop_theta:
         for e in f.V:
             one_e = utils.char_vector(f, e)
             k_max = np.min([c[e] - x[e], r - norm])
 
-            # find the maximum integer 1 <= k <= min(c[e] - x[e], r - np.sum(x))
-            # with f.margin_gain(k * utils.char_vector(f, e)) >= k * theta
-            lazy_list = (
-                (k, candidate_x := x + k * one_e, f.value(candidate_x))
-                for k in range (1, k_max + 1)
-            )
-            lazy_list = filter(constraint_k_theta(prev_value, theta), lazy_list)
-            k, candidate_x, candidate_value = max(lazy_list, key=utils.fst, default=(None, None, None))
+            # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta
+            k_range = list(range(1, k_max + 1))
+            best_t = utils.binary_search(f, k_range, one_e=one_e, x=x,
+                                         prev_value=prev_value, theta=theta)
+            
+            if best_t is None:
+                # no feasible k was found, nothing gets added to x this iteration.
+                continue
 
-            if k is not None:
-                # We add to x the element in the that increases the value of f
-                # the most, extracted k times.
-                x = candidate_x
-                norm += k
-                prev_value = candidate_value
+            k, candidate_x, candidate_value = best_t
+
+            # We add to x the element in the that increases the value of f
+            # the most, extracted k times.
+            x = candidate_x
+            norm += k
+            prev_value = candidate_value
 
         theta = theta * (1 - eps)
 

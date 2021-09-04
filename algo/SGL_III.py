@@ -14,7 +14,7 @@ def SGL_III(rng: np.random.Generator,
     :param rng: numpy random generator instance
     :param f: integer-lattice submodular function objective
     :param r: cardinality constraint
-    :param eps: approximation threshold in (0, 0.5)
+    :param eps: non-negative error threshold
     """
     if eps is None:
         eps = 1 / (4 * f.n)
@@ -38,23 +38,6 @@ def SGL_III(rng: np.random.Generator,
     # norm keeps track of the L-1 norm of x
     norm = 0
 
-    def constraint_k_theta(prev_value: float, theta: float):
-        """
-        Higher-order function to be applied to filter.
-        :param prev_value: value of f(x) at the previous iteration
-        :param theta: decreasing threshold
-        """
-        def helper(t: Tuple[int, NDArray[Int64], float]) -> bool:
-            """
-            Returns true iff f(k * 1_e | x) >= k * theta
-            :param t: (k, x + k * 1_e, f(x + k * 1_e)) tuple
-            """
-            k, _, candidate_value = t
-            return candidate_value - prev_value >= k * theta
-
-        return helper
-
-
     while norm < r and t < r:
         # random sub-sampling step
         sample_space = np.where(x < f.b)[0]
@@ -65,17 +48,15 @@ def SGL_III(rng: np.random.Generator,
             one_e = utils.char_vector(f, e)
             
             # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta
-            lazy_list = (
-                (k, candidate_x := x + k * one_e, f.value(candidate_x))
-                for k in range(1, min(f.b - x[e], r - norm) + 1)
-            )
-            lazy_list = filter(constraint_k_theta(prev_value, theta), lazy_list)
-            k, candidate_x, candidate_value = max(lazy_list, key=utils.fst, default=(None, None, None))
+            k_range = list(range(1, min(f.b - x[e], r - norm) + 1))
+            best_t = utils.binary_search(f, k_range, one_e=one_e, x=x,
+                                         prev_value=prev_value, theta=theta)
 
-            if k == None:
+            if best_t == None:
                 # no feasible k was found, nothing gets added to x this iteration.
                 continue
 
+            k, candidate_x, candidate_value = best_t
             if candidate_value >= prev_value:
                 # We add to x the element in the sample q that increases the value of f
                 # the most, extracted k times.
