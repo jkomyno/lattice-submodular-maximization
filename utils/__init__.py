@@ -8,6 +8,7 @@ from .powerset import powerset
 from .seed import get_rng, get_seed
 from .prod import prod
 from .compute_sample_size import compute_sample_size
+from .binary_search import binary_search
 
 # numpy vector coordinate-wise utils
 import utils.coord_wise
