@@ -1,52 +1,46 @@
-def generate_nbr(n_base: int, b_base: int):
+import math
+import numpy as np
+
+
+def generate_nbr(n_start: int, b_times: int):
     n_factors = [
         1,
         2,
         5,
-        10,
-        15,
-    ]
-
-    b_factors = [
-        1,
-        2,
-        4,
-        8,
-        12,
-        16,
-        24,
+        7.5
     ]
 
     r_factors = [
+        0.25,
+        0.5,
         1,
-        1.5,
-        2,
-        4,
+        1.5
     ]
 
     for n_factor in n_factors:
-        for b_factor in b_factors:
-            for r_factor in r_factors:
-                n = int(n_base * n_factor)
-                b = int(b_base * b_factor)
-                r = int(b * r_factor)
+        n = math.floor(n_start * n_factor)
+            
+        for r_factor in r_factors:
+            r = n * r_factor
+            r = math.floor(r)
+            b_factors = np.linspace(r // 10, r, b_times)
 
-                if b <= r and r < (n * b):
-                    yield n, b, r
+            for b in b_factors:
+                b = math.floor(b)
+                if r < (n * b):
+                    yield n, r, b
 
 
 if __name__ == '__main__':
-    n_base = 50
-    b_base = 5
-    
-    nbr_list = [*generate_nbr(n_base, b_base)]
+    n_start = 50
+    b_times = 8
+    nbr_set = sorted(set(generate_nbr(n_start, b_times)))
 
     padding = ' '
     pad_length = 6
 
-    for n, b, r in nbr_list:
+    for n, r, b in nbr_set:
         print(f'''    -
       - {n:{padding}<{pad_length}}# n
       - {b:{padding}<{pad_length}}# b
       - {r:{padding}<{pad_length}}# r''')
-

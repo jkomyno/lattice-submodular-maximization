@@ -1,4 +1,4 @@
-objective: 'demo_monotone'
+objective: 'demo_monotone_skewed'
 
 benchmark:
   # n: size of the ground set
