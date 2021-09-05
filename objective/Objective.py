@@ -62,7 +62,7 @@ class Objective(ABC):
         """
         self._n_calls += 1
         
-        if self._n_calls % 1_000_000 == 0:
+        if self._n_calls % 1_000 == 0:
             print(f'Oracle calls: {self._n_calls}')
 
         return None

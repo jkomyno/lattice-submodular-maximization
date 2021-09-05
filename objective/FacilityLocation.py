@@ -38,6 +38,6 @@ class FacilityLocation(Objective):
         W_st = np.array([[self.W[s, t] for s in self.V] for t in self.T])
 
         # m is the application of p_st to W_st
-        M = x * W_st * ((self.b + 1 - x) ** 0.5) / self.b
+        M = x * W_st * np.sqrt(1 - x + self.b) / self.b
 
         return np.sum(np.max(M, axis=1))

@@ -30,6 +30,7 @@ class BudgetAllocation(Objective):
 
       super().__init__(V, b)
       self.G = G
+      self.W = nx.adjacency_matrix(G)
 
       # set of advertiser customers
       self.T = T
@@ -42,7 +43,7 @@ class BudgetAllocation(Objective):
         # self.G[s][t]['weight'] models the influence probability of
         # channel s to customer t
         return 1 - utils.prod((
-          ((1 - (self.G[s][t]['weight'] if self.G.has_edge(s, t) else 0)) ** x[s])
+          (1 - self.W[s, t]) ** x[s]
           for (_, s) in self.G.edges(t)
         ))
 
