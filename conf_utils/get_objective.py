@@ -58,10 +58,9 @@ def load_demo_non_monotone(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_non_monotone' dictionary entry in conf/config.yaml
     """
-    nbr: List[Tuple[int, int, int]] = params.benchmark.nbr
-    
+    nbr: List[Tuple[int, int, int]] = list(map(lambda t: map(multiply, t), params.benchmark.nbr))
+
     for (n, b, r) in nbr:
-        n, b, r = map(multiply, (n, b, r))
         yield (DemoNonMonotone(rng, n=n, b=b), r)
 
 
@@ -75,9 +74,9 @@ def load_facility_location(basedir: str,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    print(f'Loading Yahoo! Data...')
-    G, _ = dataset_utils.import_yahoo_data(basedir)
-    print(f'...Yahoo! Data successfully loaded')
+    print(f'Loading Wikilens Ratings...')
+    G = dataset_utils.import_wikilens_ratings(basedir)
+    print(f'...Wikilens Ratings successfully loaded')
     br: List[Tuple[int, int]] = params.benchmark.br
     
     for (b, r) in br:
