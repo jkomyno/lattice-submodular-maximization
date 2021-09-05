@@ -4,13 +4,13 @@
 #SBATCH --ntasks-per-node=1          # tasks per node
 #SBATCH --cpus-per-task=1            # cpus per task
 #SBATCH --mem=6GB                    # memory per node
-#SBATCH --time=3:00:00               # time limit
-#SBATCH --error=stderr.demo_monotone.SGL_I.txt            
-#SBATCH --output=stdout.demo_monotone.SGL_I.txt           
-#SBATCH --partition=cpufast          # partition name
+#SBATCH --time=24:00:00              # time limit
+#SBATCH --error=stderr.demo_monotone.Soma_DR_I.txt            
+#SBATCH --output=stdout.demo_monotone.Soma_DR_I.txt           
+#SBATCH --partition=cpulong          # partition name
 ml Python/3.8.6-GCCcore-10.2.0
 
 python -u main.py \
   -m runtime=cluster \
-  obj=demo_monotone \
-  algo=SGL-I
+  obj=demo_non_monotone \
+  algo=Soma-DR-I

@@ -10,7 +10,7 @@
 #SBATCH --partition=cpulong          # partition name
 ml Python/3.8.6-GCCcore-10.2.0
 
-python main.py \
+python -u main.py \
   -m runtime=cluster \
   obj=demo_monotone \
   algo=Soma-DR-I
