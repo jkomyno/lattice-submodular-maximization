@@ -5,8 +5,8 @@ from typing import Tuple
 import utils
 
 
-def SGL_II(rng: np.random.Generator,
-           f: Objective, r: int, eps: float = None) -> Tuple[NDArray[Int64], float]:
+def SGL_II_b(rng: np.random.Generator,
+             f: Objective, r: int, eps: float = None) -> Tuple[NDArray[Int64], float]:
     """
     Randomized algorithm for DR-ubmodular maximization of monotone functions
     defined on the integer lattice with cardinality constraints.
@@ -39,27 +39,17 @@ def SGL_II(rng: np.random.Generator,
         sample_space = np.where(x < f.b)[0]
         Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
 
-        # lazy list of (e, best_k), where best_k is the highest k such that
-        # f(x + k * 1_e) >= f(x) while making sure that the cardinality constraint
-        # is respected
-        e_k_best: Tuple[int, int] = [
-            (e, min(f.b - x[e], r - norm))
-            for e in Q
-        ]
-
-        # lazy list of (one_e, best_k)
-        # one_e_k_best = utils.map_fst(lambda e: utils.char_vector(f, e), e_k_best)
-        one_e_k_best = map(lambda ek: (utils.char_vector(f, ek[0]) , ek[1]), e_k_best)
-
         # We add to x the element in the sample q that increases the value of f
-        # the most.
+        # the most. k might also be 0.
         x, prev_value, marginal_gain, k = max((
             (
-                candidate_x := x + k * one_e,
+                candidate_x := x + k * utils.char_vector(f, e),
                 candidate_value := f.value(candidate_x),
                 candidate_value - prev_value,
                 k
-            ) for one_e, k in one_e_k_best
+            )
+            for e in Q
+            for k in range(min(f.b - x[e], r - norm) + 1)
         ), key=utils.trd)
 
         # update norm
