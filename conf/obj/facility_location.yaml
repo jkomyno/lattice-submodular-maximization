@@ -6,8 +6,8 @@ benchmark:
   # It must hold that b <= r and b * r < n
   br:
     -
-      - 3 # b
-      - 3 # r
+      - 2 # b
+      - 5 # r
     -
-      - 3 # b
-      - 6 # r
+      - 4 # b
+      - 5 # r

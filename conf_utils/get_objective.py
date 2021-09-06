@@ -102,7 +102,7 @@ def load_budget_allocation(basedir: str,
         print(f'b_factor: {b_factor}')
         print(f'r_factor: {r_factor}')
         b = math.ceil(avg_price * b_factor)
-        r = math.ceil(b * r_factor)
+        r = math.ceil(avg_price * r_factor)
         yield (BudgetAllocation(G=G, b=b), r)
 
 
