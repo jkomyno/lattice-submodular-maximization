@@ -5,6 +5,7 @@ from omegaconf import DictConfig
 from objective import Objective, DemoMonotone, DemoMonotoneSkewed, \
                       DemoNonMonotone, FacilityLocation, BudgetAllocation
 import dataset_utils
+import utils
 
 
 OBJ_MAP = {
@@ -64,7 +65,8 @@ def load_demo_non_monotone(rng: np.random.Generator,
         yield (DemoNonMonotone(rng, n=n, b=b), r)
 
 
-def load_facility_location(basedir: str,
+def load_facility_location(rng: np.random.Generator,
+                           basedir: str,
                            params,
                            **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
@@ -74,16 +76,17 @@ def load_facility_location(basedir: str,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    print(f'Loading Wikilens Ratings...')
-    G = dataset_utils.import_wikilens_ratings(basedir)
-    print(f'...Wikilens Ratings successfully loaded')
+    print(f'Loading Brunson Revolution...')
+    G = dataset_utils.import_brunson_revolution(rng, basedir)
+    print(f'...Brunson Revolution successfully loaded')
     br: List[Tuple[int, int]] = params.benchmark.br
     
     for (b, r) in br:
         yield (FacilityLocation(G=G, b=b), r)
 
 
-def load_budget_allocation(basedir: str,
+def load_budget_allocation(rng: np.random.Generator,
+                           basedir: str,
                            params,
                            **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
@@ -93,16 +96,13 @@ def load_budget_allocation(basedir: str,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    print(f'Loading Yahoo! Data...')
-    G, avg_price = dataset_utils.import_yahoo_data(basedir)
-    print(f'...Yahoo! Data successfully loaded')
+    print(f'Loading Brunson Revolution...')
+    G = dataset_utils.import_brunson_revolution(rng, basedir)
+    print(f'...Brunson Revolution successfully loaded')
+    utils.send_telegram(f'...Brunson Revolution successfully loaded')
     br: List[Tuple[int, int]] = params.benchmark.br
     
-    for b_factor, r_factor in br:
-        print(f'b_factor: {b_factor}')
-        print(f'r_factor: {r_factor}')
-        b = math.ceil(avg_price * b_factor)
-        r = math.ceil(avg_price * r_factor)
+    for b, r in br:
         yield (BudgetAllocation(G=G, b=b), r)
 
 
@@ -122,6 +122,7 @@ def get_objective(rng: np.random.Generator,
         return int(multiplier * a)
 
     print(f'Loading f: {objective_name}\n')
+    utils.send_telegram(f'Loading f: {objective_name}')
     return OBJ_MAP[objective_name](rng=rng,
                                    multiply=multiply,
                                    params=cfg.obj,
