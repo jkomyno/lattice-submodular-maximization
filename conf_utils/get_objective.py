@@ -1,11 +1,9 @@
 from typing import Iterator, Tuple, List, Callable
-import math
 import numpy as np
 from omegaconf import DictConfig
 from objective import Objective, DemoMonotone, DemoMonotoneSkewed, \
                       DemoNonMonotone, FacilityLocation, BudgetAllocation
 import dataset_utils
-import utils
 
 
 OBJ_MAP = {
@@ -76,9 +74,9 @@ def load_facility_location(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    print(f'Loading Brunson Revolution...')
-    G = dataset_utils.import_brunson_revolution(rng, basedir)
-    print(f'...Brunson Revolution successfully loaded')
+    print(f'Loading Movielens 100k...')
+    G = dataset_utils.import_movielens_100k(basedir)
+    print(f'...Movielens 100k successfully loaded')
     br: List[Tuple[int, int]] = params.benchmark.br
     
     for (b, r) in br:
@@ -96,10 +94,9 @@ def load_budget_allocation(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    print(f'Loading Brunson Revolution...')
-    G = dataset_utils.import_brunson_revolution(rng, basedir)
-    print(f'...Brunson Revolution successfully loaded')
-    utils.send_telegram(f'...Brunson Revolution successfully loaded')
+    print(f'Loading Wikilens Ratings...')
+    G = dataset_utils.import_wikilens_ratings(rng, basedir)
+    print(f'...Wikilens Ratings successfully loaded')
     br: List[Tuple[int, int]] = params.benchmark.br
     
     for b, r in br:
@@ -122,7 +119,6 @@ def get_objective(rng: np.random.Generator,
         return int(multiplier * a)
 
     print(f'Loading f: {objective_name}\n')
-    utils.send_telegram(f'Loading f: {objective_name}')
     return OBJ_MAP[objective_name](rng=rng,
                                    multiply=multiply,
                                    params=cfg.obj,

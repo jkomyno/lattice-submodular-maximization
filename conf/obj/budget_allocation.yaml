@@ -1,25 +1,26 @@
 objective: 'budget_allocation'
 
 benchmark:
-  # b: multiplier factor of the upper bound of the lattice domain
-  # r: multiplier factor of cardinality constraint
+  # b: upper bound of the lattice domain
+  # r: cardinality constraint
   # It must hold that b <= r and b * r < n
   br:
     -
       - 2
+      - 8
+    -
       - 4
+      - 8
+    -
+      - 6
+      - 8
+    
     -
       - 2
-      - 8
+      - 12
+    -
+      - 3
+      - 12
     -
       - 4
-      - 5
-    -
-      - 4
-      - 8
-    -
-      - 6
-      - 6
-    -
-      - 6
-      - 8
+      - 12
