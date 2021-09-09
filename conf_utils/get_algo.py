@@ -3,7 +3,7 @@ from omegaconf import DictConfig
 from objective import Objective
 from algo import SGL_I, SGL_II, SGL_III, \
                  SGL_II_b, SGL_III_b, \
-                 SSG, soma_DR_I, soma_II
+                 SSG, soma_DR_I, soma_DR_I_b, soma_II
 
 
 ALGO_MAP = {
@@ -14,6 +14,7 @@ ALGO_MAP = {
     'SGL-III-b': lambda *args: load_SGL_III_b(*args),
     'SSG': lambda *args: load_SSG(*args),
     'Soma-DR-I': lambda *args: load_soma_DR_I(*args),
+    'Soma-DR-I-b': lambda *args: load_soma_DR_I_b(*args),
     'Soma-II': lambda *args: load_soma_II(*args),
 }
 
@@ -70,6 +71,15 @@ def load_soma_DR_I(_: np.random.Generator, f: Objective, r: int):
     c = np.full((f.n, ), fill_value=f.b)
     def load():
         x, value = soma_DR_I(f, c, r, eps=get_eps(f))
+        return x, value
+
+    return load
+
+
+def load_soma_DR_I_b(_: np.random.Generator, f: Objective, r: int):
+    c = np.full((f.n, ), fill_value=f.b)
+    def load():
+        x, value = soma_DR_I_b(f, c, r, eps=get_eps(f))
         return x, value
 
     return load
