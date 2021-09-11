@@ -7,7 +7,7 @@
 #SBATCH --time=72:00:00              # time limit
 #SBATCH --error=stderr.budget_allocation.Soma_DR_I.txt            
 #SBATCH --output=stdout.budget_allocation.Soma_DR_I.txt           
-#SBATCH --partition=amdlong          # partition name
+#SBATCH --partition=cpulong          # partition name
 ml Python/3.8.6-GCCcore-10.2.0
 
 python -u main.py \
