@@ -39,22 +39,13 @@ def soma_DR_I_b(f: Objective, c: NDArray[Int64], r: int, eps: float) -> Tuple[ND
 
         return helper
 
-    d = max((f.value(utils.char_vector(f, e)) for e in f.V))
-    theta = d
-    stop_theta = (eps / r) * d
-
-    while theta >= stop_theta:
+    while norm < r:
         for e in f.V:
             one_e = utils.char_vector(f, e)
             k_max = np.min([c[e] - x[e], r - norm])
 
-            # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta
-            lazy_list = (
-                (k, x + k * one_e, f.value(x + k * one_e))
-                for k in range(1, k_max + 1)
-            )
-            lazy_list = filter(constraint_k_theta(prev_value, theta), lazy_list)
-            k, candidate_x, candidate_value = max(lazy_list, key=utils.fst, default=(None, None, None))
+            # find k that maximizes f(k * 1_e | x)
+            # TODO
 
             if k == None:
                 # no feasible k was found, nothing gets added to x this iteration.
@@ -66,7 +57,5 @@ def soma_DR_I_b(f: Objective, c: NDArray[Int64], r: int, eps: float) -> Tuple[ND
                 x = candidate_x
                 norm += k
                 prev_value = candidate_value
-
-        theta = theta * (1 - eps)
 
     return x, prev_value

@@ -53,7 +53,7 @@ def SGL_II_b(rng: np.random.Generator,
         ), key=utils.trd)
 
         # update norm
-        norm += k
+        norm = np.sum(x)
 
         # increment iteration counter
         t += 1

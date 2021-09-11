@@ -38,19 +38,19 @@ def SGL_III_b(rng: np.random.Generator,
     # norm keeps track of the L-1 norm of x
     norm = 0
 
-    def constraint_k_theta(prev_value: float, theta: float):
+    def constraint_k_theta(theta: float):
         """
         Higher-order function to be applied to filter.
-        :param prev_value: value of f(x) at the previous iteration
         :param theta: decreasing threshold
         """
         def helper(t: Tuple[int, NDArray[Int64], float]) -> bool:
             """
             Returns true iff f(k * 1_e | x) >= k * theta
-            :param t: (k, x + k * 1_e, f(x + k * 1_e)) tuple
+            :param t: (k, x + k * 1_e, f(k * 1_e | x)) tuple
             """
             k, _, candidate_value = t
-            return candidate_value - prev_value >= k * theta
+            marginal_gain = candidate_value - prev_value
+            return marginal_gain >= k * theta
 
         return helper
 
@@ -65,11 +65,15 @@ def SGL_III_b(rng: np.random.Generator,
             
             # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta
             lazy_list = (
-                (k, x + k * one_e, f.value(x + k * one_e))
-                for k in range(min(f.b - x[e], r - norm) + 1)
+                (
+                    k,
+                    candidate_x := x + k * one_e,
+                    f.value(candidate_x) - prev_value
+                )
+                for k in range(0, min(f.b - x[e], r - norm) + 1)
             )
-            lazy_list = filter(constraint_k_theta(prev_value, theta), lazy_list)
-            k, candidate_x, candidate_value = max(lazy_list, key=utils.fst, default=(None, None, None))
+            lazy_list = filter(constraint_k_theta(theta), lazy_list)
+            k, candidate_x, candidate_value = max(lazy_list, key=utils.trd, default=(None, None, None))
 
             if k == None:
                 # no feasible k was found, nothing gets added to x this iteration.
@@ -79,7 +83,7 @@ def SGL_III_b(rng: np.random.Generator,
                 # We add to x the element in the sample q that increases the value of f
                 # the most, extracted k times.
                 x = candidate_x
-                norm += k
+                norm = np.sum(x)
                 prev_value = candidate_value
 
         # update theta
