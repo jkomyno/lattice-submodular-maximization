@@ -23,20 +23,21 @@ def binary_search(f: Objective, k_range: List[int], one_e: NDArray[Int64],
 
     k_max = k_range[-1]
     k_min = k_range[0]
-    candidate_k = k_max
     best_t = None
 
-    while k_max - k_min > 1:
+    while k_min <= k_max:
+        candidate_k = k_max - (k_max - k_min) // 2
+
         candidate_x = x + candidate_k * one_e
         candidate_value = f.value(candidate_x)
-        if (candidate_value - prev_value) >= candidate_k * theta:
-            k_min = candidate_k
+        marginal_gain = candidate_value - prev_value
+
+        if marginal_gain >= candidate_k * theta:
+            k_min = candidate_k + 1
 
             if best_t is None or best_t[0] < candidate_k:
                 best_t = (candidate_k, candidate_x, candidate_value)
         else:
-            k_max = candidate_k
-
-        candidate_k = (k_max + k_min) // 2
+            k_max = candidate_k - 1
     
     return best_t
