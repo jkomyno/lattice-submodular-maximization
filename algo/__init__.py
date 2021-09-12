@@ -2,8 +2,6 @@ from .SGL_I import SGL_I
 from .SGL_II import SGL_II
 from .SGL_II_b import SGL_II_b
 from .SGL_III import SGL_III
-from .SGL_III_b import SGL_III_b
 from .SSG import SSG
 from .soma_DR_I import soma_DR_I
-from .soma_DR_I_b import soma_DR_I_b
 from .soma_II import soma_II
