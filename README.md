@@ -1,17 +1,15 @@
 # Lattice Submodular Maximization
 
-## Tech stack
+## Programming Language
 
-- Python 3.7
-- [Hydra](https://hydra.cc) configuration framework
-
+- Python 3.8
 
 ## Initialize project
 
-Install the virtual environment:
+Install the Python virtual environment:
 
 ```bash
-python -m venv ./venv
+python3 -m venv ./venv
 ```
 
 Activate the virtual environment:
@@ -20,19 +18,46 @@ Activate the virtual environment:
 source ./venv/bin/activate
 ```
 
-Install third-party dependencies:
+Install third-party Python dependencies:
 
 ```bash
-$ python -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
-Run:
+## Run experiments
+
+#### Synthetic DR-Monotone Submodular Function
 
 ```bash
-python main.py -m obj=demo_monotone,facility_location,budget_allocation \
-  algo=Soma-DR-I,Soma-II,SSG,SGL-I,SGL-II,SGL-III
+python main.py -m obj=demo_monotone \
+  algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
-## Configuration
+#### Budget Allocation
 
-Please read and edit [/conf/config.yaml](/conf/config.yaml)
+```bash
+python main.py -m obj=budget_allocation \
+  algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
+```
+
+#### Facility Location
+
+```bash
+python main.py -m obj=facility_location \
+  algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
+```
+
+#### Synthetic Non-Monotone Submodular Function
+
+```bash
+python main.py -m obj=demo_non_monotone \
+  algo=SSG,SGL-I,SGL-II,SGL-II-b,Soma-II
+```
+
+## Experiment Results
+
+The experiment results are stored in the [`out/benchmarks`](out/benchmarks) folder.
+
+## Notice
+
+We plan on releasing this code implementation of "" as an open-source repository, upon success of the review process.
