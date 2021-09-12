@@ -1,10 +1,10 @@
-# Lattice Submodular Maximization
+# Stochastic Maximization of Monotone DR-Submodular Functions on the Integer Lattice - AAAI'22
 
 ## Programming Language
 
 - Python 3.8
 
-## Initialize project
+## Initialize the Python Environment
 
 Install the Python virtual environment:
 
@@ -24,40 +24,45 @@ Install third-party Python dependencies:
 python3 -m pip install -r requirements.txt
 ```
 
-## Run experiments
+## To see the algorithms implemented
 
-#### Synthetic DR-Monotone Submodular Function
+While the repository is rather extensive, the implementation of the algorithms in the [./algo](./algo) folder.
+It follows the pseudocode very closely and it is commented. 
+
+## To run the experiments:
+
+#### Run experiments on the Synthetic DR-Monotone Submodular Function
 
 ```bash
 python main.py -m obj=demo_monotone \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
-#### Budget Allocation
+#### Run experiments on the Budget Allocation Problem
 
 ```bash
 python main.py -m obj=budget_allocation \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
-#### Facility Location
+#### Run experiments on the Facility Location Problem
 
 ```bash
 python main.py -m obj=facility_location \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
-#### Synthetic Non-Monotone Submodular Function
+#### Run experiments on the Synthetic Non-Monotone Submodular Function
 
 ```bash
 python main.py -m obj=demo_non_monotone \
   algo=SSG,SGL-I,SGL-II,SGL-II-b,Soma-II
 ```
 
-## Experiment Results
+## To see the results of the experiments
 
 The experiment results are stored in the [`out/benchmarks`](out/benchmarks) folder.
 
 ## Notice
 
-We plan on releasing this code implementation of "Stochastic Maximization of Monotone DR-Submodular Functions on the Integer Lattice" as an open-source repository, upon success of the review process.
+We plan on releasing this code under the MIT license, if and when accepted.
