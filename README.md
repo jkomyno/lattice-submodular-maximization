@@ -34,28 +34,32 @@ It follows the pseudocode very closely and it is commented.
 #### Run experiments on the Synthetic DR-Monotone Submodular Function
 
 ```bash
-python main.py -m obj=demo_monotone \
+python3 main.py -m obj=demo_monotone \
+  runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
 #### Run experiments on the Budget Allocation Problem
 
 ```bash
-python main.py -m obj=budget_allocation \
+python3 main.py -m obj=budget_allocation \
+  runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
 #### Run experiments on the Facility Location Problem
 
 ```bash
-python main.py -m obj=facility_location \
+python3 main.py -m obj=facility_location \
+  runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
 
 #### Run experiments on the Synthetic Non-Monotone Submodular Function
 
 ```bash
-python main.py -m obj=demo_non_monotone \
+python3 main.py -m obj=demo_non_monotone \
+  runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-II-b,Soma-II
 ```
 

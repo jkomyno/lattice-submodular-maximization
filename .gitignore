@@ -258,6 +258,3 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv
-
-# Yahoo! Data dataset
-dataset/yahoo-data/ydata-ysm-advertiser-bids-v1_0.txt
