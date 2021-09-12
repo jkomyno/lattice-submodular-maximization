@@ -60,4 +60,4 @@ The experiment results are stored in the [`out/benchmarks`](out/benchmarks) fold
 
 ## Notice
 
-We plan on releasing this code implementation of "" as an open-source repository, upon success of the review process.
+We plan on releasing this code implementation of "Stochastic Maximization of Monotone DR-Submodular Functions on the Integer Lattice" as an open-source repository, upon success of the review process.
