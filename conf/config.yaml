@@ -20,4 +20,4 @@ defaults:
   - runtime: 'laptop'
 
   # run multiple configurations in parallel
-  # - override hydra/launcher: joblib
+  - override hydra/launcher: joblib
