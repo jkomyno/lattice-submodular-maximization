@@ -6,6 +6,19 @@ from objective import Objective, DemoMonotone, DemoMonotoneSkewed, \
 import dataset_utils
 
 
+def compute_B(rng: np.random.Generator,
+              n: int, B_range: Tuple[int, int]) -> NDArray[int]:
+    """
+    Compute the upper-bound array B.
+    :param rng: numpy random generator instance
+    :param n: size of the ground set
+    :param B_range: inclusive range for the values of each entry of B
+    """
+    low, high = B_range
+
+    return rng.integers(low=low, high=high, size=(n, ), endpoint=True)
+
+
 OBJ_MAP = {
     'demo_monotone': lambda **kwargs: load_demo_monotone(**kwargs),
     'demo_monotone_skewed': lambda **kwargs: load_demo_monotone_skewed(**kwargs),
@@ -25,10 +38,11 @@ def load_demo_monotone(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_monotone' dictionary entry in conf/config.yaml
     """
-    nbr: List[Tuple[int, int, int]] = list(map(lambda t: map(multiply, t), params.benchmark.nbr))
+    nBr: List[Tuple[int, Tuple[int, int], int]] = list(map(lambda t: map(multiply, t), params.benchmark.nBr))
 
-    for (n, b, r) in nbr:
-        yield (DemoMonotone(rng, n=n, b=b), r)
+    for (n, B_range, r) in nBr:
+        B = compute_B(rng, n, B_range)
+        yield (DemoMonotone(rng, n=n, B=B), r)
 
 
 def load_demo_monotone_skewed(rng: np.random.Generator,
@@ -41,10 +55,11 @@ def load_demo_monotone_skewed(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_monotone' dictionary entry in conf/config.yaml
     """
-    nbr: List[Tuple[int, int, int]] = list(map(lambda t: map(multiply, t), params.benchmark.nbr))
+    nBr: List[Tuple[int, Tuple[int, int], int]] = list(map(lambda t: map(multiply, t), params.benchmark.nBr))
 
-    for (n, b, r) in nbr:
-        yield (DemoMonotoneSkewed(rng, n=n, b=b), r)
+    for (n, B_range, r) in nBr:
+        B = compute_B(rng, n, B_range)
+        yield (DemoMonotoneSkewed(rng, n=n, B=B), r)
 
 
 def load_demo_non_monotone(rng: np.random.Generator,
@@ -57,10 +72,11 @@ def load_demo_non_monotone(rng: np.random.Generator,
     :param multiply: function to apply to n, b, r
     :param params: 'params.demo_non_monotone' dictionary entry in conf/config.yaml
     """
-    nbr: List[Tuple[int, int, int]] = list(map(lambda t: map(multiply, t), params.benchmark.nbr))
+    nBr: List[Tuple[int, Tuple[int, int], int]] = list(map(lambda t: map(multiply, t), params.benchmark.nBr))
 
-    for (n, b, r) in nbr:
-        yield (DemoNonMonotone(rng, n=n, b=b), r)
+    for (n, B_range, r) in nbr:
+        B = compute_B(rng, n, B_range)
+        yield (DemoNonMonotone(rng, n=n, B=B), r)
 
 
 def load_facility_location(rng: np.random.Generator,
