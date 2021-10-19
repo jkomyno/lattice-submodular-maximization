@@ -42,7 +42,7 @@ class BenchmarkDF(object):
 
     def __enter__(self):
         if self.verbose:
-            print(f'\nBenchmarking n={self.n}; b={self.b}; r={self.r}')
+            print(f'\nBenchmarking n={self.n}; B=[{self.b_low}, {self.b_high}]; r={self.r}')
 
         return self
 
