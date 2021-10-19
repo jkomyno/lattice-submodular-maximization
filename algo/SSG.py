@@ -8,7 +8,7 @@ from utils import bridge
 
 
 def SSG(rng: np.random.Generator,
-        f: Objective, r: int, eps: float = None) -> Tuple[NDArray[int], int]:
+        f: Objective, r: int, eps: float) -> Tuple[NDArray[int], int]:
     """
     Simulated StochasticGreedy algorithm in the integer lattice domain.
     :param rng: numpy random generator instance

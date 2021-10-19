@@ -6,7 +6,7 @@ import utils
 
 
 def SGL_III_b(rng: np.random.Generator, f: Objective,
-              r: int, eps: float = None) -> Tuple[NDArray[int], float]:
+              r: int, eps: float) -> Tuple[NDArray[int], float]:
     """
     Randomized algorithm for integer-lattice submodular maximization of monotone functions with cardinality
     constraints in linear time.
@@ -16,9 +16,6 @@ def SGL_III_b(rng: np.random.Generator, f: Objective,
     :param r: cardinality constraint
     :param eps: non-negative error threshold
     """
-    if eps is None:
-        eps = 1 / (4 * f.n)
-
     # compute s, the sample size
     s = utils.compute_sample_size(n=f.n, r=r, eps=eps)
 

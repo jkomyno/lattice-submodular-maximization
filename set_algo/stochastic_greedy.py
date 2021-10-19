@@ -7,7 +7,7 @@ import utils
 
 
 def stochastic_greedy(rng: np.random.Generator, f: SetObjective,
-                      r: int, eps: float = None) -> Tuple[Set[int], float]:
+                      r: int, eps: float) -> Tuple[Set[int], float]:
     """
     Computes a set A \subseteq V such that |A| \leq r.
     :param rng: numpy random generator instance
@@ -15,9 +15,6 @@ def stochastic_greedy(rng: np.random.Generator, f: SetObjective,
     :param r: cardinality constraint
     :param eps: error threshold
     """
-    if eps is None:
-        eps = 1 / (4 * f.n)
-
     # compute s, the sample size
     s = utils.compute_sample_size(n=f.n, r=r, eps=eps)
 
