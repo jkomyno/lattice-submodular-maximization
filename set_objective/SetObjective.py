@@ -1,9 +1,11 @@
+import numpy as np
 from abc import ABC
 from typing import List, AbstractSet
+from nptyping import NDArray
 
 
 class SetObjective(ABC):
-    def __init__(self, ground_set: List[int], b: int):
+    def __init__(self, ground_set: List[int], B: NDArray[int]):
         """
         Define a new set submodular function over an expanded (n x b) ground set.
         Basically, define a set submodular function that emulates an integer lattice
@@ -12,9 +14,9 @@ class SetObjective(ABC):
         :param b: upper bound of the integer lattice domain of f
         """
         self._n = len(ground_set)
-        self._b = b
+        self._B = B
         self._original_ground_set = ground_set
-        self._ground_set = set(range(self._n * self._b))
+        self._ground_set = set(range(np.sum(B)))
 
     @property
     def V(self) -> AbstractSet[int]:
@@ -24,18 +26,11 @@ class SetObjective(ABC):
         return self._ground_set
 
     @property
-    def b(self) -> int:
-        """
-        Return the upper bound scalar value of the integer lattice domain.
-        """
-        return self._b
-
-    @property
     def n(self) -> int:
         """
         Return the size of the ground set
         """
-        return self._n * self._b
+        return len(self._ground_set)
 
     @property
     def original_n(self) -> int:

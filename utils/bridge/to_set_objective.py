@@ -11,7 +11,7 @@ def to_set_objective(f: Objective) -> SetObjective:
     """
     class SetObjectiveImpl(SetObjective):
         def __init__(self):
-            super().__init__(ground_set=f.V, b=f.b)
+            super().__init__(ground_set=f.V, B=f.B)
 
         def value(self, S: AbstractSet[int]) -> int:
             """

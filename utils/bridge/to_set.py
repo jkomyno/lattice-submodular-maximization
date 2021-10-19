@@ -1,10 +1,9 @@
 from typing import Set
-from nptyping import NDArray, Int64
 from objective import Objective
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 
 
-def to_set(f: Objective, x: NDArray[Int64]) -> Set[int]:
+def to_set(f: Objective, x: NDArray[int]) -> Set[int]:
     """
     Convert an integer lattice solution to a set submodular solution.
     :param f: integer lattice submodular function

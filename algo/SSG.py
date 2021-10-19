@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Tuple
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from objective import Objective
 from set_objective import SetObjective
 import set_algo
@@ -8,7 +8,7 @@ from utils import bridge
 
 
 def SSG(rng: np.random.Generator,
-        f: Objective, r: int, eps: float = None) -> Tuple[NDArray[Int64], int]:
+        f: Objective, r: int, eps: float = None) -> Tuple[NDArray[int], int]:
     """
     Simulated StochasticGreedy algorithm in the integer lattice domain.
     :param rng: numpy random generator instance

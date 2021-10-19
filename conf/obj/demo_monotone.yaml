@@ -2,7 +2,7 @@ objective: 'demo_monotone'
 
 benchmark:
   # n: size of the ground set
-  # b: upper bound of the lattice domain
+  # b: inclusive range for the component-wise upper bounds of the lattice domain
   # r: cardinality constraint
   # It must hold that b <= r and b * r < n
   nbr:

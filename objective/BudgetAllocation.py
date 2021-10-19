@@ -1,12 +1,12 @@
 import networkx as nx
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from typing import List
 import utils
 from .Objective import Objective
 
 
 class BudgetAllocation(Objective):
-    def __init__(self, G: nx.Graph, b: int):
+    def __init__(self, G: nx.Graph, B: NDArray[int]):
       """
       Optimal budget allocation is a special case of the influence maximization
       problem. It can be modeled as a bipartite graph (S, T; W), where S and T
@@ -28,14 +28,14 @@ class BudgetAllocation(Objective):
       V: List[int] = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
       T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
 
-      super().__init__(V, b)
+      super().__init__(V, B)
       self.G = G
       self.W = nx.adjacency_matrix(G)
 
       # set of advertiser customers
       self.T = T
 
-    def I(self, t: int, x: NDArray[Int64]) -> float:
+    def I(self, t: int, x: NDArray[int]) -> float:
         """
         Return the total influence of customer t from all channels.
         :param x: budget assignment among the advertising channels.
@@ -47,7 +47,7 @@ class BudgetAllocation(Objective):
           for (_, s) in self.G.edges(t)
         ))
 
-    def value(self, x: NDArray[Int64]) -> float:
+    def value(self, x: NDArray[int]) -> float:
         """
         Value oracle for the Budget Allocation problem.
         :param x: allotted budget.

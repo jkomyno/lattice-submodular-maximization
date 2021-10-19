@@ -1,12 +1,12 @@
 import networkx as nx
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from typing import List
 from .Objective import Objective
 
 
 class FacilityLocation(Objective):
-    def __init__(self, G: nx.Graph, b: int):
+    def __init__(self, G: nx.Graph, B: NDArray[int]):
         """
         Generate an integer-lattice smodular, monotone function for the
         facility location problem.
@@ -21,13 +21,13 @@ class FacilityLocation(Objective):
         V: List[int] = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
         T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
 
-        super().__init__(V, b)
+        super().__init__(V, B)
         self.W = nx.adjacency_matrix(G)
 
         # list of target customers
         self.T = T
 
-    def value(self, x: NDArray[Int64]) -> float:
+    def value(self, x: NDArray[int]) -> float:
         """
         Value oracle for the facility location problem.
         :param x: scale of all facilities
@@ -38,6 +38,6 @@ class FacilityLocation(Objective):
         W_st = np.array([[self.W[s, t] for s in self.V] for t in self.T])
 
         # m is the application of p_st to W_st
-        M = x * W_st * np.sqrt(1 - x + self.b) / self.b
+        M = x * W_st * np.sqrt(1 - x + self.B) / self.B
 
         return np.sum(np.max(M, axis=1))

@@ -1,11 +1,10 @@
-import numpy as np
 from abc import ABC
 from typing import List
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 
 
 class Objective(ABC):
-    def __init__(self, ground_set: List[int], b: int):
+    def __init__(self, ground_set: List[int], B: NDArray[int]):
         """
         Define a new integer-lattice submodular function.
         :param ground_set: ground set of f
@@ -13,8 +12,7 @@ class Objective(ABC):
         """
         self._ground_set = ground_set
         self._n = len(ground_set)
-        self._b = b
-        self._B = np.full((self._n,), b)
+        self._B = B
 
         # keep track of the number of oracle calls
         self._n_calls = 0
@@ -27,18 +25,11 @@ class Objective(ABC):
         return self._ground_set
 
     @property
-    def B(self) -> NDArray[Int64]:
+    def B(self) -> NDArray[int]:
         """
         Return the upper bound vector of the integer lattice domain.
         """
         return self._B
-
-    @property
-    def b(self) -> int:
-        """
-        Return the upper bound scalar value of the integer lattice domain.
-        """
-        return self._b
 
     @property
     def n(self) -> int:
@@ -54,7 +45,7 @@ class Objective(ABC):
         """
         return self._n_calls
 
-    def value(self, x: NDArray[Int64]) -> int:
+    def value(self, x: NDArray[int]) -> int:
         """
         Value oracle for the submodular problem.
         :param x: subset of the ground set
@@ -67,7 +58,7 @@ class Objective(ABC):
 
         return None
 
-    def marginal_gain(self, x: NDArray[Int64], y: NDArray[Int64]) -> int:
+    def marginal_gain(self, x: NDArray[int], y: NDArray[int]) -> int:
         """
         Value oracle for f(x | y) := f(x + y) - f(y)
         """
