@@ -37,14 +37,14 @@ def SGL_III(rng: np.random.Generator,
 
     while norm < r and t < r:
         # random sub-sampling step
-        sample_space = np.where(x < f.b)[0]
+        sample_space = np.where(x < f.B)[0]
         Q = rng.choice(sample_space, size=min(s * 8, len(sample_space)), replace=False)
         Q_one = list(map(lambda e: utils.char_vector(f, e), Q))
 
         # potentially add multiple copies of every item in Q
         for i, e in enumerate(Q):
             one_e = Q_one[i]
-            k_max = np.min([f.b - x[e], r - norm])
+            k_max = np.min([f.B[e] - x[e], r - norm])
             k_range = list(range(1, k_max + 1))
 
             # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta

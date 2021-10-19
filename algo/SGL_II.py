@@ -33,14 +33,14 @@ def SGL_II(rng: np.random.Generator,
 
     while norm < r and t < r:
         # random sub-sampling step
-        sample_space = np.where(x < f.b)[0]
+        sample_space = np.where(x < f.B)[0]
         Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
 
         # lazy list of (e, best_k), where best_k is the highest k such that
         # f(x + k * 1_e) >= f(x) while making sure that the cardinality constraint
         # is respected
         e_k_best: Tuple[int, int] = [
-            (e, min(f.b - x[e], r - norm))
+            (e, min(f.B[e] - x[e], r - norm))
             for e in Q
         ]
 

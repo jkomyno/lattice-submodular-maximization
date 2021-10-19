@@ -27,7 +27,7 @@ def SGL_I(rng: np.random.Generator,
 
     for _ in range(r):
         # random sub-sampling step
-        sample_space = np.where(x < f.b)[0]
+        sample_space = np.where(x < f.B)[0]
         Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
         Q_one = map(lambda e: utils.char_vector(f, e), Q)
 

@@ -48,7 +48,7 @@ def SGL_III_b(rng: np.random.Generator, f: Objective,
             # potentially add multiple copies of every item in Q
             for i, e in enumerate(Q):
                 one_e = Q_one[i]
-                k_max = np.min([f.b - x[e], r - norm])
+                k_max = np.min([f.B[e] - x[e], r - norm])
                 k_range = list(range(1, k_max + 1))
 
                 # find k in k_interval maximal such that f(k * 1_e | x) >= k * theta

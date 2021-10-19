@@ -33,7 +33,7 @@ def SGL_II_b(rng: np.random.Generator,
 
     while norm < r and t < r:
         # random sub-sampling step
-        sample_space = np.where(x < f.b)[0]
+        sample_space = np.where(x < f.B)[0]
         Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
 
         # We add to x the element in the sample q that increases the value of f
@@ -46,7 +46,7 @@ def SGL_II_b(rng: np.random.Generator,
                 k
             )
             for e in Q
-            for k in range(min(f.b - x[e], r - norm) + 1)
+            for k in range(min(f.B[e] - x[e], r - norm) + 1)
         ), key=utils.trd)
 
         # update norm
