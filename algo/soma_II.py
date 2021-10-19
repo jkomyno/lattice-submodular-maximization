@@ -6,15 +6,17 @@ from typing import Tuple
 import utils
 
 
-def soma_II(f: Objective, c: NDArray[int], r: int, eps: float) -> Tuple[NDArray[int], float]:
+def soma_II(f: Objective, r: int, eps: float) -> Tuple[NDArray[int], float]:
     """
     Implement Soma'18 algorithm for maximizing a submodular monotone function
     over the integer lattice under cardinality constraint.
     :param f: a DR-submodular monotone function
-    :param c: the vector upper bound of the lattice domain
     :param r: the cardinality constraint
     :param eps: the error threshold
     """
+    # c is the vector upper bound of the lattice domain
+    c = f.B
+
     # the solution starts from the zero vector
     x = np.zeros((f.n, ), dtype=int)
 

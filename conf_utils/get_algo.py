@@ -75,18 +75,16 @@ def load_SSG(rng: np.random.Generator, f: Objective, r: int):
 
 
 def load_soma_DR_I(_: np.random.Generator, f: Objective, r: int):
-    c = np.full((f.n, ), fill_value=f.b)
     def load():
-        x, value = soma_DR_I(f, c, r, eps=get_eps(f))
+        x, value = soma_DR_I(f, r, eps=get_eps(f))
         return x, value
 
     return load
 
 
 def load_soma_II(_: np.random.Generator, f: Objective, r: int):
-    c = np.full((f.n, ), fill_value=f.b)
     def load():
-        x, value = soma_II(f, c, r, eps=get_eps(f))
+        x, value = soma_II(f, r, eps=get_eps(f))
         return x, value
 
     return load
