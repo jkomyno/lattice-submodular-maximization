@@ -1,9 +1,9 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from objective import Objective
 
 
-def char_vector(f: Objective, e: int) -> NDArray[Int64]:
+def char_vector(f: Objective, e: int) -> NDArray[int]:
     """
     Return the n-dimensional characteristic vector with 1 on coordinate e.
     :param f: integer-lattice submodular function

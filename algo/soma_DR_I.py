@@ -1,11 +1,11 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from typing import Tuple
 from objective import Objective
 import utils
 
 
-def soma_DR_I(f: Objective, c: NDArray[Int64], r: int, eps: float) -> Tuple[NDArray[Int64], float]:
+def soma_DR_I(f: Objective, c: NDArray[int], r: int, eps: float) -> Tuple[NDArray[int], float]:
     """
     Implement Soma'18 algorithm for maximizing a DR-submodular monotone function
     over the integer lattice under cardinality constraint.

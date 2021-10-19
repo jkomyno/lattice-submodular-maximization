@@ -1,12 +1,12 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from typing import Tuple
 from objective import Objective
 import utils
 
 
 def SGL_I(rng: np.random.Generator,
-          f: Objective, r: int, eps: float = None) -> Tuple[NDArray[Int64], float]:
+          f: Objective, r: int, eps: float = None) -> Tuple[NDArray[int], float]:
     """
     Randomized algorithm for DR-ubmodular maximization of monotone functions
     defined on the integer lattice with cardinality constraints.

@@ -1,10 +1,10 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from objective import Objective
 
 
 def random_vector_with_norm(rng: np.random.Generator,
-                            f: Objective, norm: int) -> NDArray[Int64]:
+                            f: Objective, norm: int) -> NDArray[int]:
     """
     Generate an n-dimensional vector with the given Manhattan norm.
     :param rng: numpy random generator instance

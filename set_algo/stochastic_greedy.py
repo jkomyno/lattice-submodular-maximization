@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from typing import Set, Tuple
 from set_objective import SetObjective
 import utils
@@ -31,7 +31,7 @@ def stochastic_greedy(rng: np.random.Generator, f: SetObjective,
         # R is a random subset obtained by sampling s random elements
         # from V - A
         sample_space = list(f.V - A)
-        R: NDArray[Int64] = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
+        R: NDArray[int] = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
         prev_value, marginal_gain, a = max((
             (candidate_value := f.value(A | {a}), candidate_value - prev_value, a)
             for a in R

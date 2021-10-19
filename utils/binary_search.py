@@ -1,11 +1,11 @@
 from typing import List, Union, Tuple
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from objective import Objective
 
 
-def binary_search(f: Objective, k_range: List[int], one_e: NDArray[Int64],
-                  x: NDArray[Int64], prev_value: float,
-                  theta: float) -> Union[None, Tuple[int, NDArray[Int64], float]]:
+def binary_search(f: Objective, k_range: List[int], one_e: NDArray[int],
+                  x: NDArray[int], prev_value: float,
+                  theta: float) -> Union[None, Tuple[int, NDArray[int], float]]:
     """
     Iterative binary search for the maximum k in k_range such that
     f.marginal_gain(k * one_e, x) >= k * theta.

@@ -1,12 +1,12 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 from objective import Objective
 from typing import Union
 from typing import Tuple
 import utils
 
 
-def soma_II(f: Objective, c: NDArray[Int64], r: int, eps: float) -> Tuple[NDArray[Int64], float]:
+def soma_II(f: Objective, c: NDArray[int], r: int, eps: float) -> Tuple[NDArray[int], float]:
     """
     Implement Soma'18 algorithm for maximizing a submodular monotone function
     over the integer lattice under cardinality constraint.
@@ -41,7 +41,7 @@ def soma_II(f: Objective, c: NDArray[Int64], r: int, eps: float) -> Tuple[NDArra
     return x, f.value(x)
 
 
-def binary_search_lattice(f: Objective, one_e: NDArray[Int64], theta: float,
+def binary_search_lattice(f: Objective, one_e: NDArray[int], theta: float,
                           k_max: int, eps: float) -> Union[float, None]:
     # find the minimum k_min with 0 <= k_min <= k_max such that f(k_min * one_e) > 0.
     lazy_list = ((k_min, f.value(k_min * one_e)) for k_min in range(0, k_max + 1))

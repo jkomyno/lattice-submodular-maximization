@@ -1,8 +1,8 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 
 
-def leq(x: NDArray[Int64], y: NDArray[Int64]) -> bool:
+def leq(x: NDArray[int], y: NDArray[int]) -> bool:
     """
     Return True iff x is coordinate-wise less than or equal to y.
     """

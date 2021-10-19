@@ -1,8 +1,8 @@
 import numpy as np
-from nptyping import NDArray, Int64
+from nptyping import NDArray
 
 
-def max(x: NDArray[Int64], y: NDArray[Int64]) -> int:
+def max(x: NDArray[int], y: NDArray[int]) -> int:
     """
     Return the coordinate-wise maximum between x and y.
     """
