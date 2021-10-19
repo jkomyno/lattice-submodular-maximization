@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
+from typing import Tuple
 from io import TextIOWrapper
 
 
 class BenchmarkDF(object):
-    def __init__(self, n: int, b: int, r: int, out_csv: TextIOWrapper,
+    def __init__(self, n: int, B_range: Tuple[int, int], r: int, out_csv: TextIOWrapper,
                  verbose: bool = False):
         """
         :param n: size of the ground set
@@ -15,7 +16,7 @@ class BenchmarkDF(object):
         """
 
         self.n = n
-        self.b = b
+        self.b_low, self.b_high = B_range
         self.r = r
         self.out_csv = out_csv
         self.verbose = verbose
@@ -23,7 +24,8 @@ class BenchmarkDF(object):
         self.dtypes = [
             ('i', np.int8),
             ('n', np.int32),
-            ('b', np.int32),
+            ('b_low', np.int32),
+            ('b_high', np.int32),
             ('r', np.int32),
             ('approx', np.float64),
             ('n_calls', np.int64),
@@ -83,7 +85,8 @@ class BenchmarkDF(object):
             {
                 'i': i,
                 'n': self.n,
-                'b': self.b,
+                'b_low': self.b_low,
+                'b_high': self.b_high,
                 'r': self.r,
                 'approx': approx,
                 'n_calls': n_calls,

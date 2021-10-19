@@ -1,5 +1,6 @@
 from typing import Iterator, Tuple, List, Callable
 import numpy as np
+from nptyping import NDArray
 from omegaconf import DictConfig
 from objective import Objective, DemoMonotone, DemoMonotoneSkewed, \
                       DemoNonMonotone, FacilityLocation, BudgetAllocation
@@ -29,54 +30,48 @@ OBJ_MAP = {
 
 
 def load_demo_monotone(rng: np.random.Generator,
-                       multiply: Callable[[int], int],
                        params,
                        **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random modular, monotone function
     :param rng: numpy random generator instance
-    :param multiply: function to apply to n, b, r
     :param params: 'params.demo_monotone' dictionary entry in conf/config.yaml
     """
-    nBr: List[Tuple[int, Tuple[int, int], int]] = list(map(lambda t: map(multiply, t), params.benchmark.nBr))
+    nBr: List[Tuple[int, Tuple[int, int], int]] = params.benchmark.nBr
 
     for (n, B_range, r) in nBr:
         B = compute_B(rng, n, B_range)
-        yield (DemoMonotone(rng, n=n, B=B), r)
+        yield (DemoMonotone(rng, n=n, B=B, B_range=B_range), r)
 
 
 def load_demo_monotone_skewed(rng: np.random.Generator,
-                              multiply: Callable[[int], int],
                               params,
                               **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random skewed modular, monotone function
     :param rng: numpy random generator instance
-    :param multiply: function to apply to n, b, r
     :param params: 'params.demo_monotone' dictionary entry in conf/config.yaml
     """
-    nBr: List[Tuple[int, Tuple[int, int], int]] = list(map(lambda t: map(multiply, t), params.benchmark.nBr))
+    nBr: List[Tuple[int, Tuple[int, int], int]] = params.benchmark.nBr
 
     for (n, B_range, r) in nBr:
         B = compute_B(rng, n, B_range)
-        yield (DemoMonotoneSkewed(rng, n=n, B=B), r)
+        yield (DemoMonotoneSkewed(rng, n=n, B=B, B_range=B_range), r)
 
 
 def load_demo_non_monotone(rng: np.random.Generator,
-                           multiply: Callable[[int], int],
                            params,
                            **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random modular, non_monotone function
     :param rng: numpy random generator instance
-    :param multiply: function to apply to n, b, r
     :param params: 'params.demo_non_monotone' dictionary entry in conf/config.yaml
     """
-    nBr: List[Tuple[int, Tuple[int, int], int]] = list(map(lambda t: map(multiply, t), params.benchmark.nBr))
+    nBr: List[Tuple[int, Tuple[int, int], int]] = params.benchmark.nBr
 
-    for (n, B_range, r) in nbr:
+    for (n, B_range, r) in nBr:
         B = compute_B(rng, n, B_range)
-        yield (DemoNonMonotone(rng, n=n, B=B), r)
+        yield (DemoNonMonotone(rng, n=n, B=B, B_range=B_range), r)
 
 
 def load_facility_location(rng: np.random.Generator,
@@ -87,7 +82,6 @@ def load_facility_location(rng: np.random.Generator,
     Generate a random integer-lattice submodular, monotone function that models
     the Facility Location problem.
     :param rng: numpy random generator instance
-    :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
     print(f'Loading Movielens 100k...')
@@ -107,7 +101,6 @@ def load_budget_allocation(rng: np.random.Generator,
     Generate a random integer-lattice DR-submodular, monotone function that models
     the Budget Allocation problem.
     :param rng: numpy random generator instance
-    :param multiply: function to apply to n, b, r
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
     print(f'Loading Wikilens Ratings...')
@@ -129,13 +122,8 @@ def get_objective(rng: np.random.Generator,
     :param cfg: Hydra configuration dictionary
     """
     objective_name = cfg.obj.objective
-    multiplier = cfg.runtime.multiplier
-
-    def multiply(a: int):
-        return int(multiplier * a)
 
     print(f'Loading f: {objective_name}\n')
     return OBJ_MAP[objective_name](rng=rng,
-                                   multiply=multiply,
                                    params=cfg.obj,
                                    basedir=basedir)

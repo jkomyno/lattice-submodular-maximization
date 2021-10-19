@@ -1,17 +1,18 @@
 import numpy as np
+from typing import Tuple
 from nptyping import NDArray
 from .Objective import Objective
 
 
 class DemoNonMonotone(Objective):
-    def __init__(self, rng: np.random.Generator, n: int, B: NDArray[int]):
+    def __init__(self, rng: np.random.Generator, n: int, B: NDArray[int], B_range: Tuple[int, int] = None):
         """
         Generate a random integer-lattice modular, non-monotone function
         :param rng: numpy random generator instance
         :param n: size of the ground set
         :param b: upper bound of the integer lattice domain of f
         """
-        super().__init__(list(range(n)), B)
+        super().__init__(list(range(n)), B, B_range)
 
         # reference to the numpy random generator instance
         self.rng = rng
