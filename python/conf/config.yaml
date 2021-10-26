@@ -1,0 +1,20 @@
+name: lattice-submodular-maximization
+
+selected:
+  # set to 1 to print debug info, 0 otherwise
+  verbose: 1
+
+defaults:
+  - _self_
+
+  # integer-lattice submodular function to maximize
+  - obj: 'demo_monotone'
+
+  # algorithm to benchmark
+  - algo: 'SGL-III-b'
+  
+  # specify the timeouts for the benchmarks
+  - runtime: 'laptop'
+
+  # run multiple configurations in parallel
+  - override hydra/launcher: joblib

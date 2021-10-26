@@ -1,12 +1,12 @@
-# Stochastic Maximization of Monotone DR-Submodular Functions on the Integer Lattice - AAAI'22
+# Randomized Maximization of Monotone DR-Submodular Functions on the Integer Lattice
+## Tech stack
 
-## Programming Language
+- Python 3.8 or superior
+- [Hydra](https://hydra.cc) configuration framework
 
-- Python 3.8
+## Initialize project
 
-## Initialize the Python Environment
-
-Install the Python virtual environment:
+Install the virtual environment:
 
 ```bash
 python3 -m venv ./venv
@@ -18,23 +18,43 @@ Activate the virtual environment:
 source ./venv/bin/activate
 ```
 
-Install third-party Python dependencies:
+Install third-party dependencies:
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r python/requirements.txt
 ```
 
-## To see the algorithms implemented
+## How to run
 
-While the repository is rather extensive, the implementation of the algorithms in the [./algo](./algo) folder.
-It follows the pseudocode very closely and it is commented. 
+This project is composed of 2 Python modules (one for each step of the application) that should be run in sequence.
+The output of the application is stored in the [/out](/out) folder in a hierarchical fashion.
 
-## To run the experiments:
+### (1) Benchmark Step: python.benchmark
+
+- Compute the ground truth density map (which associates each subset to the probability of being sampled from the ground truth distribution) only once
+- Run the specified samplers over the target probabilistic submodular models, saving the history of the samples obtained in CSV
+
+```bash
+python3 -u -m python.benchmark -m \
+  obj=demo_monotone_skewed \
+  runtime=laptop \
+  algo=SSG,SGL-III-b,SGL-III-c,Soma-DR-I
+```
+
+### (2) Plot generation Step: python.plotter
+
+- Plot the cumulative probability distance between each sampler's outcome and the ground truth distribution
+
+```bash
+python3 -u -m python.plotter
+```
+
+## Different types of benchmark experiments:
 
 #### Run experiments on the Synthetic DR-Monotone Submodular Function
 
 ```bash
-python3 main.py -m obj=demo_monotone \
+python3 -u -m python.benchmark -m obj=demo_monotone \
   runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
@@ -42,7 +62,7 @@ python3 main.py -m obj=demo_monotone \
 #### Run experiments on the Budget Allocation Problem
 
 ```bash
-python3 main.py -m obj=budget_allocation \
+python3 -u -m python.benchmark -m obj=budget_allocation \
   runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
@@ -50,7 +70,7 @@ python3 main.py -m obj=budget_allocation \
 #### Run experiments on the Facility Location Problem
 
 ```bash
-python3 main.py -m obj=facility_location \
+python3 -u -m python.benchmark -m obj=facility_location \
   runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-III,Soma-II,Soma-DR-I
 ```
@@ -58,14 +78,14 @@ python3 main.py -m obj=facility_location \
 #### Run experiments on the Synthetic Non-Monotone Submodular Function
 
 ```bash
-python3 main.py -m obj=demo_non_monotone \
+python3 -u -m python.benchmark -m obj=demo_non_monotone \
   runtime=laptop \
   algo=SSG,SGL-I,SGL-II,SGL-II-b,Soma-II
 ```
 
 ## To see the results of the experiments
 
-The experiment results are stored in the [`out/benchmarks`](out/benchmarks) folder.
+The experiment results are stored in the [`out/`](out/) folder.
 
 ## Notice
 

@@ -1,0 +1,26 @@
+name: 'budget_allocation'
+
+benchmark:
+  # b: upper bound of the lattice domain
+  # r: cardinality constraint
+  # It must hold that b <= r and b * r < n
+  br:
+    -
+      - 2
+      - 8
+    -
+      - 4
+      - 8
+    -
+      - 6
+      - 8
+    
+    -
+      - 2
+      - 12
+    -
+      - 3
+      - 12
+    -
+      - 4
+      - 12
