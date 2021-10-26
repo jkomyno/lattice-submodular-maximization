@@ -35,10 +35,10 @@ def SGL_III(rng: np.random.Generator,
     theta = d
     stop_theta = (eps / r) * d
 
-    while norm < r and t < r:
+    while norm < r:
         # random sub-sampling step
         sample_space = np.where(x < f.B)[0]
-        Q = rng.choice(sample_space, size=min(s * 8, len(sample_space)), replace=False)
+        Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
         Q_one = list(map(lambda e: utils.char_vector(f, e), Q))
 
         # potentially add multiple copies of every item in Q
@@ -69,5 +69,6 @@ def SGL_III(rng: np.random.Generator,
         # increment iteration counter
         t += 1
 
+    print(f'norm: {norm}; r: {r}')
     assert norm <= r
     return x, prev_value
