@@ -36,7 +36,7 @@ The output of the application is stored in the [/out](/out) folder in a hierarch
 
 ```bash
 python3 -u -m python.benchmark -m \
-  obj=demo_monotone_skewed \
+  obj=demo_monotone,demo_monotone_skewed \
   runtime=laptop \
   algo=SSG,SGL-III-b,SGL-III-c,Soma-DR-I
 ```
