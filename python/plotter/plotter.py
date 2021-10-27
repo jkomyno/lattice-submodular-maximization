@@ -54,11 +54,11 @@ def plotter(cfg: DictConfig) -> None:
     #  demo_monotone  #
     ###################
 
-    # demo_monotone_df = import_csvs_by_f_name(f'{basedir}/out/', f_name='demo_monotone')
-    # df = demo_monotone_df
-    # plots_folder = f'{basedir}/out/{df.attrs["obj"]}/plots'
-    # Path(plots_folder).mkdir(parents=True, exist_ok=True)
-    # utils.plot_synthetic(demo_monotone_df, plots_folder)
+    demo_monotone_df = import_csvs_by_f_name(f'{basedir}/out/', f_name='demo_monotone')
+    df = demo_monotone_df
+    plots_folder = f'{basedir}/out/{df.attrs["obj"]}/plots'
+    Path(plots_folder).mkdir(parents=True, exist_ok=True)
+    utils.plot_synthetic(demo_monotone_df, plots_folder)
 
     ##########################
     #  demo_monotone_skewed  #
