@@ -33,9 +33,8 @@ def SGL_III_c(rng: np.random.Generator, f: Objective,
 
     d = max((f.value(utils.char_vector(f, e)) for e in f.V))
     theta = d
-    stop_theta = (eps / r) * d
 
-    while theta >= stop_theta and norm < r:
+    while norm < r:
         V = np.copy(f.V)
         rng.shuffle(V)
 
