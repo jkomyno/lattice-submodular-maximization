@@ -1,4 +1,4 @@
-from typing import Iterator, Tuple, List, Callable
+from typing import Iterator, Tuple, List
 import numpy as np
 from nptyping import NDArray
 from omegaconf import DictConfig
@@ -75,17 +75,18 @@ def load_demo_non_monotone(rng: np.random.Generator,
 
 
 def load_facility_location(rng: np.random.Generator,
-                           basedir: str,
+                           dataset_dir: str,
                            params,
                            **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random integer-lattice submodular, monotone function that models
     the Facility Location problem.
     :param rng: numpy random generator instance
+    :param dataset_dir: datasets main directory
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
     print(f'Loading Movielens 100k...')
-    G = dataset_utils.import_movielens_100k(basedir)
+    G = dataset_utils.import_movielens_100k(dataset_dir)
     print(f'...Movielens 100k successfully loaded')
     br: List[Tuple[int, int]] = params.benchmark.br
     
@@ -94,31 +95,36 @@ def load_facility_location(rng: np.random.Generator,
 
 
 def load_budget_allocation(rng: np.random.Generator,
-                           basedir: str,
+                           dataset_dir: str,
                            params,
                            **kwargs) -> Iterator[Tuple[Objective, int]]:
     """
     Generate a random integer-lattice DR-submodular, monotone function that models
     the Budget Allocation problem.
     :param rng: numpy random generator instance
+    :param dataset_dir: datasets main directory
     :param params: 'params.demo_facility_location' dictionary entry in conf/config.yaml
     """
-    print(f'Loading Wikilens Ratings...')
-    G = dataset_utils.import_wikilens_ratings(rng, basedir)
-    print(f'...Wikilens Ratings successfully loaded')
-    br: List[Tuple[int, int]] = params.benchmark.br
     
-    for b, r in br:
-        yield (BudgetAllocation(G=G, b=b), r)
+    print(f'Loading Wikilens Ratings...')
+    trim_graph = dataset_utils.import_wikilens_ratings(rng, dataset_dir)
+    print(f'...Wikilens Ratings successfully loaded')
+
+    nr: List[Tuple[int, int]] = params.benchmark.nr
+
+    for n, r in nr:
+        # trim the original bipartite graph G=(V \cup T, E) such that |V| = n
+        G, B = trim_graph(n=n, r=r)
+        yield (BudgetAllocation(G=G, B=B), r)
 
 
 def get_objective(rng: np.random.Generator,
-                  basedir: str,
+                  dataset_dir: str,
                   cfg: DictConfig) -> Iterator[Tuple[Objective, int]]:
     """
     Return an instance of the selected set-submodular objective
     :param rng: numpy random generator instance
-    :param basedir: base directory relative to main.py
+    :param dataset_dir: datasets main directory
     :param cfg: Hydra configuration dictionary
     """
     objective_name = cfg.obj.name
@@ -126,4 +132,4 @@ def get_objective(rng: np.random.Generator,
     print(f'Loading f: {objective_name}\n')
     return OBJ_MAP[objective_name](rng=rng,
                                    params=cfg.obj,
-                                   basedir=basedir)
+                                   dataset_dir=dataset_dir)
