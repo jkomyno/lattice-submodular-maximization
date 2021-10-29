@@ -1,6 +1,7 @@
 import networkx as nx
+from networkx.classes.function import neighbors
 from nptyping import NDArray
-from typing import List
+from typing import List, Tuple
 from .. import utils
 from .Objective import Objective
 
@@ -29,23 +30,18 @@ class BudgetAllocation(Objective):
       T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
 
       super().__init__(V, B)
-      self.G = G
-      self.W = nx.adjacency_matrix(G)
 
-      # set of advertiser customers
-      self.T = T
+      # W[s, t] is the influence probability of channel s to customer t.
+      W = nx.adjacency_matrix(G)
 
-    def I(self, t: int, x: NDArray[int]) -> float:
-        """
-        Return the total influence of customer t from all channels.
-        :param x: budget assignment among the advertising channels.
-        """
-        # self.G[s][t]['weight'] models the influence probability of
-        # channel s to customer t
-        return 1 - utils.prod((
-          (1 - self.W[s, t]) ** x[s]
-          for (_, s) in self.G.edges(t)
-        ))
+      # collect the neighbors s \in S of each t \in T
+      neighbors: List[List[int]] = [[s for s in G.neighbors(t)] for t in T]
+
+      # keep track of (1 - p(s, t), s) for each neighbors s \in S of each t \in T
+      self.probs_exp_list: List[List[Tuple[float, int]]] = [
+        [(1 - W[s, t], s) for s in s_neighbors]
+        for s_neighbors, t in zip(neighbors, T)
+      ]
 
     def value(self, x: NDArray[int]) -> float:
         """
@@ -54,4 +50,9 @@ class BudgetAllocation(Objective):
         :return: expected number of influenced people
         """
         super().value(x)
-        return sum((self.I(t, x) for t in self.T))
+        return sum((
+          1 - utils.prod(
+            neg_p_st ** x[s]
+            for neg_p_st, s in probs_exp
+          ) for probs_exp in self.probs_exp_list
+        )) 
