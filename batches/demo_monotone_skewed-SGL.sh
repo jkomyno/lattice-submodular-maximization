@@ -11,22 +11,22 @@
 #SBATCH --partition=cpufast          # partition name
 ml Python/3.8.6-GCCcore-10.2.0
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=SGL-III
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=SGL-III-b
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=SGL-III-c
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=SGL-II-b

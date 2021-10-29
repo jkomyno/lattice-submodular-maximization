@@ -11,17 +11,17 @@
 #SBATCH --partition=cpulong          # partition name
 ml Python/3.8.6-GCCcore-10.2.0
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=Soma-DR-I
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=SSG
 
-python -u main.py \
+python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_monotone_skewed \
   algo=Soma-DR-II
