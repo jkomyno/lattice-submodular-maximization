@@ -49,7 +49,17 @@ def plotter(cfg: DictConfig) -> None:
 
     # basedir w.r.t. main.py
     basedir = os.path.join(hydra.utils.get_original_cwd(), Path(__file__).parent.parent.parent)
-        
+
+    #######################
+    #  budget_allocation  #
+    #######################
+
+    budget_allocation_df = import_csvs_by_f_name(f'{basedir}/out/', f_name='budget_allocation')
+    df = budget_allocation_df
+    plots_folder = f'{basedir}/out/{df.attrs["obj"]}/plots'
+    Path(plots_folder).mkdir(parents=True, exist_ok=True)
+    utils.plot_budget_allocation(budget_allocation_df, plots_folder)
+
     ###################
     #  demo_monotone  #
     ###################
@@ -69,3 +79,13 @@ def plotter(cfg: DictConfig) -> None:
     plots_folder = f'{basedir}/out/{df.attrs["obj"]}/plots'
     Path(plots_folder).mkdir(parents=True, exist_ok=True)
     utils.plot_synthetic(demo_monotone_skewed_df, plots_folder)
+
+    #######################
+    #  demo_non_monotone  #
+    #######################
+
+    demo_non_monotone_df = import_csvs_by_f_name(f'{basedir}/out/', f_name='demo_non_monotone')
+    df = demo_non_monotone_df
+    plots_folder = f'{basedir}/out/{df.attrs["obj"]}/plots'
+    Path(plots_folder).mkdir(parents=True, exist_ok=True)
+    utils.plot_synthetic(demo_non_monotone_df, plots_folder)
