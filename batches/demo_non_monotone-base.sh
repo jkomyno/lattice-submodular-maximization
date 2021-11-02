@@ -24,4 +24,4 @@ python -u -m python.benchmark  \
 python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_non_monotone \
-  algo=Soma-DR-II
+  algo=Soma-II
