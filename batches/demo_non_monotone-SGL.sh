@@ -2,7 +2,7 @@
 
 #SBATCH -J demo_non_monotone-SGL     # job name
 #SBATCH --nodes=1                    # 1 node
-#SBATCH --ntasks-per-node=4          # tasks per node
+#SBATCH --ntasks-per-node=3          # tasks per node
 #SBATCH --cpus-per-task=1            # cpus per task
 #SBATCH --mem=32GB                   # memory per node
 #SBATCH --time=4:00:00               # time limit
@@ -25,8 +25,3 @@ python -u -m python.benchmark  \
   -m runtime=cluster \
   obj=demo_non_monotone \
   algo=SGL-III-c
-
-python -u -m python.benchmark  \
-  -m runtime=cluster \
-  obj=demo_non_monotone \
-  algo=SGL-II-b
