@@ -1,22 +1,27 @@
 import numpy as np
 import pandas as pd
-from typing import Tuple
 from io import TextIOWrapper
+from ..objective import Objective
 
 
 class BenchmarkDF(object):
-    def __init__(self, n: int, B_range: Tuple[int, int], r: int, out_csv: TextIOWrapper,
+    def __init__(self, f: Objective, r: int, out_csv: TextIOWrapper,
                  verbose: bool = False):
         """
-        :param n: size of the ground set
-        :param b: upper bound of the integer lattice domain of f
+        :param f: the integer-lattice objective function to benchmark
         :param r: cardinality constraint size
         :param opt: optimum of the maximization with cardinality constraint problem
         :param out_csv: output csv file
         """
+        # size of the ground set
+        self.n = f.n
 
-        self.n = n
-        self.b_low, self.b_high = B_range
+        # bounds of the molteplicity of each element in the ground set
+        self.b_low, self.b_high = f.B_range
+
+        # cardinality of the multiset
+        self.b_sum = np.sum(f.B)
+
         self.r = r
         self.out_csv = out_csv
         self.verbose = verbose
@@ -26,6 +31,7 @@ class BenchmarkDF(object):
             ('n', np.int32),
             ('b_low', np.int32),
             ('b_high', np.int32),
+            ('b_sum', np.int32),
             ('r', np.int32),
             ('approx', np.float64),
             ('n_calls', np.int64),
@@ -87,6 +93,7 @@ class BenchmarkDF(object):
                 'n': self.n,
                 'b_low': self.b_low,
                 'b_high': self.b_high,
+                'b_sum': self.b_sum,
                 'r': self.r,
                 'approx': approx,
                 'n_calls': n_calls,

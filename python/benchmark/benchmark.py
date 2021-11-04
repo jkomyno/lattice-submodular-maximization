@@ -44,7 +44,7 @@ def benchmark(cfg: DictConfig) -> None:
             maximizer = conf_utils.get_algo(rng, f, r, cfg=cfg)
 
             # initialize BenchmarkDF for current batch
-            with BenchmarkDF(n=f.n, B_range=f.B_range, r=r, out_csv=out_csv, verbose=True) as benchmark_df:
+            with BenchmarkDF(f=f, r=r, out_csv=out_csv, verbose=True) as benchmark_df:
                 for n_sample in range(1, n_samples + 1):
 
                     t_start = time.time_ns()
