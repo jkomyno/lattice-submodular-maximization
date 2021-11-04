@@ -1,19 +1,177 @@
 name: 'budget_allocation'
 
 benchmark:
-  # b: upper bound of the lattice domain
+  # 0.05 < p_ij < 1 for all i \in V, j \in T.
   # r: cardinality constraint
   # It must hold that r < |B|_1
-  nr:
+  nBr:
     -
-      - 10
-      - 20
+      - 10    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 20    # r
     -
-      - 10
-      - 40
+      - 10    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 30    # r
     -
-      - 20
-      - 40
+      - 10    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 40    # r
+
     -
-      - 20
-      - 80
+      - 10    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 40    # r
+    -
+      - 10    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 60    # r
+    -
+      - 10    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 80    # r
+
+    -
+      - 10    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 40    # r
+    -
+      - 10    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 60    # r
+    -
+      - 10    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 80    # r
+
+    -
+      - 20    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 20    # r
+    -
+      - 20    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 30    # r
+    -
+      - 20    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 40    # r
+
+    -
+      - 20    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 40    # r
+    -
+      - 20    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 60    # r
+    -
+      - 20    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 80    # r
+
+    -
+      - 20    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 40    # r
+    -
+      - 20    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 60    # r
+    -
+      - 20    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 80    # r
+
+    -
+      - 50    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 20    # r
+    -
+      - 50    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 30    # r
+    -
+      - 50    # n
+      -
+        - 4   # b_low
+        - 8   # b_high
+      - 40    # r
+
+    -
+      - 50    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 40    # r
+    -
+      - 50    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 60    # r
+    -
+      - 50    # n
+      -
+        - 20  # b_low
+        - 40  # b_high
+      - 80    # r
+
+    -
+      - 50    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 40    # r
+    -
+      - 50    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 60    # r
+    -
+      - 50    # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 80    # r
