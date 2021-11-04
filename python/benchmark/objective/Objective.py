@@ -1,11 +1,10 @@
-import numpy as np
 from abc import ABC
 from typing import List, Tuple
 from nptyping import NDArray
 
 
 class Objective(ABC):
-    def __init__(self, ground_set: List[int], B: NDArray[int], B_range: Tuple[int, int] = None):
+    def __init__(self, ground_set: List[int], B: NDArray[int], B_range: Tuple[int, int]):
         """
         Define a new integer-lattice submodular function.
         :param ground_set: ground set of f
@@ -14,7 +13,7 @@ class Objective(ABC):
         self._ground_set = ground_set
         self._n = len(ground_set)
         self._B = B
-        self._B_range = (np.min(B), np.max(B)) if B_range is None else B_range
+        self._B_range = B_range
 
         # keep track of the number of oracle calls
         self._n_calls = 0
@@ -62,7 +61,7 @@ class Objective(ABC):
         """
         self._n_calls += 1
         
-        if self._n_calls % 100 == 0:
+        if self._n_calls % 10000 == 0:
             print(f'Oracle calls: {self._n_calls}')
 
         return None

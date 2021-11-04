@@ -5,7 +5,7 @@ from .Objective import Objective
 
 
 class DemoNonMonotone(Objective):
-    def __init__(self, rng: np.random.Generator, n: int, B: NDArray[int], B_range: Tuple[int, int] = None):
+    def __init__(self, rng: np.random.Generator, n: int, B: NDArray[int], B_range: Tuple[int, int]):
         """
         Generate a random integer-lattice modular, non-monotone function
         :param rng: numpy random generator instance

@@ -1,5 +1,4 @@
 import networkx as nx
-from networkx.classes.function import neighbors
 from nptyping import NDArray
 from typing import List, Tuple
 from .. import utils
@@ -7,7 +6,7 @@ from .Objective import Objective
 
 
 class BudgetAllocation(Objective):
-    def __init__(self, G: nx.Graph, B: NDArray[int]):
+    def __init__(self, G: nx.Graph, B: NDArray[int], B_range: Tuple[int, int]):
       """
       Optimal budget allocation is a special case of the influence maximization
       problem. It can be modeled as a bipartite graph (S, T; W), where S and T
@@ -29,7 +28,7 @@ class BudgetAllocation(Objective):
       V: List[int] = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
       T: List[int] = [m for m in G.nodes if G.nodes[m]['bipartite'] == 1]
 
-      super().__init__(V, B)
+      super().__init__(V, B, B_range)
 
       # W[s, t] is the influence probability of channel s to customer t.
       W = nx.adjacency_matrix(G)

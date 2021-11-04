@@ -5,7 +5,7 @@ from .Objective import Objective
 
 
 class DemoMonotoneSkewed(Objective):
-    def __init__(self, rng: np.random.Generator, n: int, B: NDArray[int], B_range: Tuple[int, int] = None):
+    def __init__(self, rng: np.random.Generator, n: int, B: NDArray[int], B_range: Tuple[int, int]):
         """
         Generate a random skewed integer-lattice modular, monotone function
         :param rng: numpy random generator instance
