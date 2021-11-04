@@ -68,7 +68,7 @@ def import_wikilens_ratings(rng: np.random.Generator, basedir: str) -> Callable[
     #  trim the graph on demand  #
     ##############################
 
-    def trim_graph(n: int, r: int) -> Tuple[nx.Graph, NDArray[int]]:
+    def trim_graph(n: int) -> Tuple[nx.Graph, NDArray[int]]:
         nonlocal G_tmp
 
         # select the largest 20 out-degree channels, remove the customers without edges        
@@ -89,14 +89,13 @@ def import_wikilens_ratings(rng: np.random.Generator, basedir: str) -> Callable[
         for u, v, weight in edges:
             G.add_edge(u, v, weight=weight)
 
-        print(f'n channel_ids: {len(channel_ids_to_node)}')     # 
-        print(f'n customer_ids: {len(customer_ids_to_node)}')   # 
-        print(f'n edges: {len(edges)}')                         # 
+        print(f'n channel_ids: {len(channel_ids_to_node)}') 
+        print(f'n customer_ids: {len(customer_ids_to_node)}')
+        print(f'n edges: {len(edges)}')
 
-        B = rng.integers(low=1, high=20, endpoint=True, size=(n, ))
-        print(f'B: {B.tolist()}')
-        print(f'|B|_inf: {np.sum(B)}; r: {r}')
+        V = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
+        print(f'V: {V}')
 
-        return G, B
+        return G
 
     return trim_graph
