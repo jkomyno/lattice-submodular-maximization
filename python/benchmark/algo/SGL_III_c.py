@@ -33,6 +33,7 @@ def SGL_III_c(rng: np.random.Generator, f: Objective,
 
     d = max((f.value(utils.char_vector(f, e)) for e in f.V))
     theta = d
+    stop_theta = (eps / r) * d
 
     while norm < r:
         V = np.copy(f.V)
@@ -71,7 +72,7 @@ def SGL_III_c(rng: np.random.Generator, f: Objective,
                 prev_value = candidate_value
 
             # update theta
-            theta = theta * (1 - eps)
+            theta = max(theta * (1 - eps * (s / f.n)), stop_theta)
 
             # increment iteration counter
             t += 1
@@ -79,6 +80,6 @@ def SGL_III_c(rng: np.random.Generator, f: Objective,
             if norm == r:
                 break
 
-    print(f'norm: {norm};  t: {t}')
+    print(f'SGL-III-c  t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
     assert norm <= r
     return x, prev_value
