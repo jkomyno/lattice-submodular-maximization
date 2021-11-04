@@ -93,9 +93,6 @@ def import_wikilens_ratings(rng: np.random.Generator, basedir: str) -> Callable[
         print(f'n customer_ids: {len(customer_ids_to_node)}')
         print(f'n edges: {len(edges)}')
 
-        V = [n for n in G.nodes if G.nodes[n]['bipartite'] == 0]
-        print(f'V: {V}')
-
         return G
 
     return trim_graph
