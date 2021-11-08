@@ -65,11 +65,11 @@ def SGL_III(rng: np.random.Generator,
             prev_value = candidate_value
 
         # update theta
-        theta = max(theta * (1 - eps * (s_actual / f.n)), stop_theta)
+        theta = max(theta * (1 - eps), stop_theta)
 
         # increment iteration counter
         t += 1
 
     print(f'SGL-III    t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
-    assert norm <= r
+    assert norm == r
     return x, prev_value
