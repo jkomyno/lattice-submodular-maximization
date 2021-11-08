@@ -7,3 +7,4 @@ from .SGL_III_c import SGL_III_c
 from .SSG import SSG
 from .soma_DR_I import soma_DR_I
 from .soma_II import soma_II
+from .lai_DR import lai_DR
