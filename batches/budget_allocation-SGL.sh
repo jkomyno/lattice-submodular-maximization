@@ -12,16 +12,16 @@
 ml Python/3.8.6-GCCcore-10.2.0
 
 python -u -m python.benchmark  \
-  -m runtime=cluster \
+  runtime=cluster \
   obj=budget_allocation \
   algo=SGL-III
 
 python -u -m python.benchmark  \
-  -m runtime=cluster \
+  runtime=cluster \
   obj=budget_allocation \
   algo=SGL-III-b
 
 python -u -m python.benchmark  \
-  -m runtime=cluster \
+  runtime=cluster \
   obj=budget_allocation \
   algo=SGL-III-c
