@@ -14,4 +14,4 @@ ml Python/3.8.6-GCCcore-10.2.0
 python -u -m python.benchmark  \
   runtime=cluster \
   obj=demo_monotone \
-  algo=Soma-DR
+  algo=Soma-DR-I
