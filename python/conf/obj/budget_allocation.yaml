@@ -229,3 +229,27 @@ benchmark:
         - 40  # b_low
         - 80  # b_high
       - 80    # r
+    -
+      - 300   # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 50    # r
+    -
+      - 300   # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 200   # r
+    -
+      - 300   # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 300   # r
+    -
+      - 300   # n
+      -
+        - 40  # b_low
+        - 80  # b_high
+      - 400   # r
