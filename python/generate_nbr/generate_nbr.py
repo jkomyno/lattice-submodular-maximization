@@ -3,7 +3,7 @@ import numpy as np
 from typing import Iterator, Tuple
 
 
-def generate_nbr(n_start: int = 50, b_times: int = 8) -> Iterator[Tuple[int, int, Tuple[int, int]]]:
+def generate_nbr(n_start: int = 100, b_times: int = 6) -> Iterator[Tuple[int, int, Tuple[int, int]]]:
     n_factors = [
         1,
         2,
@@ -15,7 +15,7 @@ def generate_nbr(n_start: int = 50, b_times: int = 8) -> Iterator[Tuple[int, int
         0.25,
         0.5,
         1,
-        1.5
+        2
     ]
 
     for n_factor in n_factors:
@@ -28,7 +28,7 @@ def generate_nbr(n_start: int = 50, b_times: int = 8) -> Iterator[Tuple[int, int
             if r < n:
                 yield n, r, (1, 1)
 
-            b_factors = np.linspace(r // 20, r, b_times)
+            b_factors = np.linspace(r // 20, r // 2, b_times)
 
             for b in b_factors:
                 B = (math.floor(b), math.floor(b * 4))
