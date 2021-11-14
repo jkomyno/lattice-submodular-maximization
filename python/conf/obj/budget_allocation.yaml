@@ -6,250 +6,77 @@ benchmark:
   # It must hold that r < |B|_1
   nBr:
     -
-      - 10    # n
+      - 150   # n
       -
-        - 4   # b_low
-        - 8   # b_high
-      - 5     # r
+        - 10  # b_low
+        - 50  # b_high
+      - 75    # r
     -
-      - 10    # n
+      - 150   # n
       -
-        - 4   # b_low
-        - 8   # b_high
-      - 20    # r
+        - 10  # b_low
+        - 50  # b_high
+      - 150   # r
     -
-      - 10    # n
+      - 150   # n
       -
-        - 4   # b_low
-        - 8   # b_high
-      - 30    # r
-    -
-      - 10    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 40    # r
-
-    -
-      - 10    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 10    # r
-    -
-      - 10    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 40    # r
-    -
-      - 10    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 60    # r
-    -
-      - 10    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 80    # r
-
-    -
-      - 10    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 10    # r
-    -
-      - 10    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 40    # r
-    -
-      - 10    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 60    # r
-    -
-      - 10    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 80    # r
-
-    -
-      - 20    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 5     # r
-    -
-      - 20    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 20    # r
-    -
-      - 20    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 30    # r
-    -
-      - 20    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 40    # r
-
-    -
-      - 20    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 10    # r
-    -
-      - 20    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 40    # r
-    -
-      - 20    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 60    # r
-    -
-      - 20    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 80    # r
-
-    -
-      - 20    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 10    # r
-    -
-      - 20    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 40    # r
-    -
-      - 20    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 60    # r
-    -
-      - 20    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 80    # r
-
-    -
-      - 50    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 10    # r
-    -
-      - 50    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 20    # r
-    -
-      - 50    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 30    # r
-    -
-      - 50    # n
-      -
-        - 4   # b_low
-        - 8   # b_high
-      - 40    # r
-
-    -
-      - 50    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 10    # r
-    -
-      - 50    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 40    # r
-    -
-      - 50    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 60    # r
-    -
-      - 50    # n
-      -
-        - 20  # b_low
-        - 40  # b_high
-      - 80    # r
-
-    -
-      - 50    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 10    # r
-    -
-      - 50    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 40    # r
-    -
-      - 50    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 60    # r
-    -
-      - 50    # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 80    # r
-    -
-      - 300   # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 50    # r
-    -
-      - 300   # n
-      -
-        - 40  # b_low
-        - 80  # b_high
-      - 200   # r
-    -
-      - 300   # n
-      -
-        - 40  # b_low
-        - 80  # b_high
+        - 10  # b_low
+        - 50  # b_high
       - 300   # r
+
+    -
+      - 150   # n
+      -
+        - 10  # b_low
+        - 90  # b_high
+      - 75    # r
+    -
+      - 150   # n
+      -
+        - 10  # b_low
+        - 90  # b_high
+      - 150   # r
+    -
+      - 150   # n
+      -
+        - 10  # b_low
+        - 90  # b_high
+      - 300   # r
+
     -
       - 300   # n
       -
-        - 40  # b_low
-        - 80  # b_high
-      - 400   # r
+        - 10  # b_low
+        - 50  # b_high
+      - 75   # r
+    -
+      - 300   # n
+      -
+        - 10  # b_low
+        - 50  # b_high
+      - 150   # r
+    -
+      - 300   # n
+      -
+        - 10  # b_low
+        - 50  # b_high
+      - 300   # r
+
+    -
+      - 300   # n
+      -
+        - 10  # b_low
+        - 90  # b_high
+      - 75   # r
+    -
+      - 300   # n
+      -
+        - 10  # b_low
+        - 90  # b_high
+      - 150   # r
+    -
+      - 300   # n
+      -
+        - 10  # b_low
+        - 90  # b_high
+      - 300   # r
