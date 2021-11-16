@@ -5,8 +5,8 @@ from ..objective import Objective
 from .. import utils
 
 
-def SGL_III_c(rng: np.random.Generator, f: Objective,
-              r: int, eps: float) -> Tuple[NDArray[int], float]:
+def SGL_c(rng: np.random.Generator, f: Objective,
+          r: int, eps: float) -> Tuple[NDArray[int], float]:
     """
     Randomized algorithm for integer-lattice submodular maximization of monotone functions with cardinality
     constraints in linear time.
@@ -59,11 +59,13 @@ def SGL_III_c(rng: np.random.Generator, f: Objective,
                                             prev_value=prev_value, theta=theta)
 
                 if best_t is not None:
+                    # print('skip\n')
                     best_t_list.append(best_t)
 
             if len(best_t_list) > 0:
                 # select the best_t with the largest marginal gain
                 k, candidate_x, candidate_value = max(best_t_list, key=lambda best_t: best_t[2] - prev_value)
+                # print(f'k={k} for e={e}\n')
 
                 # We add to x the element in the sample q that increases the value of f
                 # the most, extracted k times.
@@ -80,6 +82,6 @@ def SGL_III_c(rng: np.random.Generator, f: Objective,
             if norm == r:
                 break
 
-    print(f'SGL-III-c  t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
+    print(f'SGL-c    t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
     assert norm == r
     return x, prev_value

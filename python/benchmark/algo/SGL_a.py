@@ -5,8 +5,8 @@ from ..objective import Objective
 from .. import utils
 
 
-def SGL_III(rng: np.random.Generator,
-            f: Objective, r: int, eps: float) -> Tuple[NDArray[int], float]:
+def SGL_a(rng: np.random.Generator,
+          f: Objective, r: int, eps: float) -> Tuple[NDArray[int], float]:
     """
     Randomized algorithm for integer-lattice submodular maximization of monotone functions with cardinality
     constraints in linear time.
@@ -70,6 +70,6 @@ def SGL_III(rng: np.random.Generator,
         # increment iteration counter
         t += 1
 
-    print(f'SGL-III    t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
+    print(f'SGL-a    t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
     assert norm == r
     return x, prev_value
