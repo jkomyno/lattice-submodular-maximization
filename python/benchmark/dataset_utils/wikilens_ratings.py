@@ -71,7 +71,7 @@ def import_wikilens_ratings(rng: np.random.Generator, basedir: str) -> Callable[
     def trim_graph(n: int) -> Tuple[nx.Graph, NDArray[int]]:
         nonlocal G_tmp
 
-        # select the largest 20 out-degree channels, remove the customers without edges        
+        # select the largest n out-degree channels, remove the customers without edges        
         largest_channels = set(map(utils.fst, sorted(G_tmp.degree, key=utils.snd, reverse=True)[:n]))
         edges = [(u, v, w) for u, v, w in set(G_tmp.edges.data('weight')) if u in largest_channels]
         surviving_customers = set(map(utils.snd, edges))
