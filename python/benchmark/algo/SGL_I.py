@@ -26,21 +26,29 @@ def SGL_I(rng: np.random.Generator,
     prev_value = 0
 
     for _ in range(r):
-        # random sub-sampling step
-        sample_space = np.where(x < f.B)[0]
-        Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
-        Q_one = map(lambda e: utils.char_vector(f, e), Q)
+        V = np.copy(f.V[x < f.B])
+        rng.shuffle(V)
 
-        # e \gets \argmax_{e \in Q} f(\mathbf{1}_e\ |\ \mathbf{x}).
-        # We add to x the element e in the sample Q that increases the value of f
-        # the most.
-        x, prev_value, marginal_gain = max((
-            (
-                candidate_x := x + one_e,
-                candidate_value := f.value(candidate_x),
-                candidate_value - prev_value
-            ) for one_e in Q_one
-        ), key=utils.trd)
+        # split list V in batches of size at most s
+        batches = utils.split_list(V, s)
 
-    assert np.sum(x) == r
+        for Q in batches:
+            Q_one = map(lambda e: utils.char_vector(f, e), Q)
+
+            # e \gets \argmax_{e \in Q} f(\symbf{1}_e\ |\ \symbf{x}).
+            # We add to x the element e in the sample Q that increases the value of f
+            # the most.
+            x, prev_value, marginal_gain = max((
+                (
+                    candidate_x := x + one_e,
+                    candidate_value := f.value(candidate_x),
+                    candidate_value - prev_value
+                ) for one_e in Q_one
+            ), key=utils.trd)
+
+            if np.sum(x) == r:
+                break
+
+    assert np.sum(x) <= r
+    print(f'SGL-I    t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
     return x, prev_value

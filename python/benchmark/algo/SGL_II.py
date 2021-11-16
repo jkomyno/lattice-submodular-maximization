@@ -25,45 +25,40 @@ def SGL_II(rng: np.random.Generator,
     # prev_value keeps track of the value of f(x)
     prev_value = 0
 
-    # norm keeps track of the L-1 norm of x
-    norm = 0
+    for _ in range(r):
+        V = np.copy(f.V[x < f.B])
+        rng.shuffle(V)
 
-    # iteration counter
-    t = 0
+        # split list V in batches of size at most s
+        batches = utils.split_list(V, s)
 
-    while norm < r and t < r:
-        # random sub-sampling step
-        sample_space = np.where(x < f.B)[0]
-        Q = rng.choice(sample_space, size=min(s, len(sample_space)), replace=False)
+        for Q in batches:
+            # lazy list of (e, k_max), where k_max is the highest k such that
+            # f(x + k * 1_e) >= f(x) while making sure that the cardinality constraint
+            # is respected
+            e_k_max: Tuple[int, int] = [
+                (e, min(f.B[e] - x[e], r - np.sum(x)))
+                for e in Q
+            ]
 
-        # lazy list of (e, best_k), where best_k is the highest k such that
-        # f(x + k * 1_e) >= f(x) while making sure that the cardinality constraint
-        # is respected
-        e_k_best: Tuple[int, int] = [
-            (e, min(f.B[e] - x[e], r - norm))
-            for e in Q
-        ]
+            # lazy list of (one_e, max_k)
+            # one_e_k_max = utils.map_fst(lambda e: utils.char_vector(f, e), e_k_max)
+            one_e_k_max = map(lambda ek: (utils.char_vector(f, ek[0]) , ek[1]), e_k_max)
 
-        # lazy list of (one_e, best_k)
-        # one_e_k_best = utils.map_fst(lambda e: utils.char_vector(f, e), e_k_best)
-        one_e_k_best = map(lambda ek: (utils.char_vector(f, ek[0]) , ek[1]), e_k_best)
+            # We add k copies of the element in the sample q that increases the value of f
+            # the most to the solution x.
+            x, prev_value, marginal_gain, k = max((
+                (
+                    candidate_x := x + k * one_e,
+                    candidate_value := f.value(candidate_x),
+                    candidate_value - prev_value,
+                    k
+                ) for one_e, k in one_e_k_max
+            ), key=utils.trd)
 
-        # We add to x the element in the sample q that increases the value of f
-        # the most.
-        x, prev_value, marginal_gain, k = max((
-            (
-                candidate_x := x + k * one_e,
-                candidate_value := f.value(candidate_x),
-                candidate_value - prev_value,
-                k
-            ) for one_e, k in one_e_k_best
-        ), key=utils.trd)
-
-        # update norm
-        norm += k
-
-        # increment iteration counter
-        t += 1
+            if np.sum(x) == r:
+                break
 
     assert np.sum(x) <= r
+    print(f'SGL-II   t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
     return x, prev_value

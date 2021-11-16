@@ -36,7 +36,7 @@ def SGL_b(rng: np.random.Generator, f: Objective,
     stop_theta = (eps / r) * d
 
     while norm < r:
-        V = np.copy(f.V)
+        V = np.copy(f.V[x < f.B])
         rng.shuffle(V)
 
         # split list V in batches of size at most s
@@ -56,12 +56,12 @@ def SGL_b(rng: np.random.Generator, f: Objective,
                                             prev_value=prev_value, theta=theta)
 
                 if best_t is None:
-                    print('skip\n')
+                    # print('skip\n')
                     # no feasible k was found, nothing gets added to x this iteration.
                     continue
 
                 k, candidate_x, candidate_value = best_t
-                print(f'k={k} for e={e}\n')
+                # print(f'k={k} for e={e}\n')
                 
                 # We add to x the element in the sample q that increases the value of f
                 # the most, extracted k times.
