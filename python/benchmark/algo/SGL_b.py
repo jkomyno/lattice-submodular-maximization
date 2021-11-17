@@ -36,7 +36,7 @@ def SGL_b(rng: np.random.Generator, f: Objective,
     stop_theta = (eps / r) * d
 
     while norm < r:
-        V = np.copy(f.V[x < f.B])
+        V = np.copy(np.where(x < f.B)[0])
         rng.shuffle(V)
 
         # split list V in batches of size at most s

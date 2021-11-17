@@ -2,6 +2,7 @@ import numpy as np
 from omegaconf import DictConfig
 from ..objective import Objective
 from ..algo import SGL_a, SGL_b, SGL_c, SGL_d, \
+                  SGL_I, SGL_II, \
                   SSG, \
                   soma_DR_I, soma_II, \
                   lai_DR
@@ -12,8 +13,8 @@ ALGO_MAP = {
     'SGL-b': lambda *args: load_SGL_b(*args),
     'SGL-c': lambda *args: load_SGL_c(*args),
     'SGL-d': lambda *args: load_SGL_d(*args),
-    # 'SGL-I': lambda *args: load_SGL_I(*args),
-    # 'SGL-II': lambda *args: load_SGL_II(*args),
+    'SGL-I': lambda *args: load_SGL_I(*args),
+    'SGL-II': lambda *args: load_SGL_II(*args),
     # 'SGL-II-b': lambda *args: load_SGL_II_b(*args),
     'SSG': lambda *args: load_SSG(*args),
     'Soma-DR-I': lambda *args: load_soma_DR_I(*args),
@@ -86,7 +87,6 @@ def load_laid_DR(rng: np.random.Generator, f: Objective, r: int):
     return load
 
 
-"""
 def load_SGL_I(rng: np.random.Generator, f: Objective, r: int):
     def load():
         x, value = SGL_I(rng, f, r, eps=get_eps(f))
@@ -103,6 +103,7 @@ def load_SGL_II(rng: np.random.Generator, f: Objective, r: int):
     return load
 
 
+"""
 def load_SGL_II_b(rng: np.random.Generator, f: Objective, r: int):
     def load():
         x, value = SGL_II_b(rng, f, r, eps=get_eps(f))

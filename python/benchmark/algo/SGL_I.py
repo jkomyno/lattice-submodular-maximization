@@ -26,7 +26,7 @@ def SGL_I(rng: np.random.Generator,
     prev_value = 0
 
     for _ in range(r):
-        V = np.copy(f.V[x < f.B])
+        V = np.copy(np.where(x < f.B)[0])
         rng.shuffle(V)
 
         # split list V in batches of size at most s
@@ -49,6 +49,9 @@ def SGL_I(rng: np.random.Generator,
             if np.sum(x) == r:
                 break
 
+        if np.sum(x) == r:
+            break
+
     assert np.sum(x) <= r
-    print(f'SGL-I    t={t}; n={f.n}; B={f.B_range}; r={r}; norm={norm}')
+    print(f'SGL-I    n={f.n}; B={f.B_range}; r={r}; norm={np.sum(x)}')
     return x, prev_value
