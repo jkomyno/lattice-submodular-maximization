@@ -11,7 +11,7 @@ defaults:
   - obj: 'demo_monotone'
 
   # algorithm to benchmark
-  - algo: 'SGL-III'
+  - algo: 'SGL-a'
   
   # specify the timeouts for the benchmarks
   - runtime: 'laptop'
