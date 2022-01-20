@@ -1,4 +1,7 @@
 # Randomized Maximization of Monotone DR-Submodular Functions on the Integer Lattice
+
+For more details about this project, please refer to chapter 4 of [my Master's Thesis](https://github.com/jkomyno/lattice-submodular-maximization/blob/master/thesis_msc.pdf).
+
 ## Tech stack
 
 - Python 3.8 or superior
